@@ -18,6 +18,9 @@ services:
       - ./wp-content/plugins:/var/www/html/wp-content/plugins
       # Uploads persistentes (no se versiona en git, va en volumen)
       - wp_uploads:/var/www/html/wp-content/uploads
+      # Semilla de migracion inicial (uploads de local), solo lectura.
+      # Se copia al volumen persistente via post-deployment command y luego se puede quitar.
+      - ./wp-content/uploads-seed:/seed-uploads:ro
     depends_on:
       - db
 
