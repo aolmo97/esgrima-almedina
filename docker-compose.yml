@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  wordpress:
+    image: wordpress:6-php8.2-apache
+    container_name: seac_wordpress
+    restart: unless-stopped
+    ports:
+      - "${WP_PORT:-8080}:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-esgrima_seac}
+      WORDPRESS_DB_USER: ${MYSQL_USER:-wp_user}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wp_password}
+      # Activa debug solo en local
+      WORDPRESS_DEBUG: 1
+    volumes:
+      # Tema propio versionado en el repo
+      - ./wp-content/themes/seac-theme:/var/www/html/wp-content/themes/seac-theme
+      # Carpeta de plugins (ACF y otros) versionada
+      - ./wp-content/plugins:/var/www/html/wp-content/plugins
+      # Uploads persistentes (no se versiona en git, va en volumen)
+      - wp_uploads:/var/www/html/wp-content/uploads
+    depends_on:
+      - db
+    networks:
+      - seac_network
+
+  db:
+    image: mysql:8.0
+    container_name: seac_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-esgrima_seac}
+      MYSQL_USER: ${MYSQL_USER:-wp_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wp_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - seac_network
+
+  adminer:
+    image: adminer:latest
+    container_name: seac_adminer
+    restart: unless-stopped
+    ports:
+      - "${ADMINER_PORT:-8081}:8080"
+    depends_on:
+      - db
+    networks:
+      - seac_network
+
+volumes:
+  db_data:
+  wp_uploads:
+
+networks:
+  seac_network:
+    driver: bridge
