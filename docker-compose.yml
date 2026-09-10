@@ -1,9 +1,6 @@
-version: "3.8"
-
 services:
   wordpress:
     image: wordpress:6-php8.2-apache
-    container_name: seac_wordpress
     restart: unless-stopped
     expose:
       - "80"
@@ -23,12 +20,9 @@ services:
       - wp_uploads:/var/www/html/wp-content/uploads
     depends_on:
       - db
-    networks:
-      - seac_network
 
   db:
     image: mysql:8.0
-    container_name: seac_db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-esgrima_seac}
@@ -37,24 +31,15 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
     volumes:
       - db_data:/var/lib/mysql
-    networks:
-      - seac_network
 
   adminer:
     image: adminer:latest
-    container_name: seac_adminer
     restart: unless-stopped
     expose:
       - "8080"
     depends_on:
       - db
-    networks:
-      - seac_network
 
 volumes:
   db_data:
   wp_uploads:
-
-networks:
-  seac_network:
-    driver: bridge
