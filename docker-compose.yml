@@ -5,8 +5,8 @@ services:
     image: wordpress:6-php8.2-apache
     container_name: seac_wordpress
     restart: unless-stopped
-    ports:
-      - "${WP_PORT:-8080}:80"
+    expose:
+      - "80"
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-esgrima_seac}
@@ -44,8 +44,8 @@ services:
     image: adminer:latest
     container_name: seac_adminer
     restart: unless-stopped
-    ports:
-      - "${ADMINER_PORT:-8081}:8080"
+    expose:
+      - "8080"
     depends_on:
       - db
     networks:
