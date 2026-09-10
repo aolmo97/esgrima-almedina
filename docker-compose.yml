@@ -12,8 +12,8 @@ services:
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-esgrima_seac}
       WORDPRESS_DB_USER: ${MYSQL_USER:-wp_user}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wp_password}
-      # Activa debug solo en local
-      WORDPRESS_DEBUG: 1
+      # Activa debug solo en local (pon WP_DEBUG=0 en Coolify)
+      WORDPRESS_DEBUG: ${WP_DEBUG:-0}
     volumes:
       # Tema propio versionado en el repo
       - ./wp-content/themes/seac-theme:/var/www/html/wp-content/themes/seac-theme
