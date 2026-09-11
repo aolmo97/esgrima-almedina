@@ -831,6 +831,7 @@ img { max-width: 100%; height: auto; display: block; }
 .horarios-cta {
   position: relative;
   overflow: hidden;
+  margin-top: 32px;
   background: linear-gradient(to right, var(--color-tint), #f0fdfa, #ffffff);
   border: 1px solid var(--color-tint-border);
   border-radius: var(--radius-xl);
@@ -1344,7 +1345,7 @@ img { max-width: 100%; height: auto; display: block; }
    Contáctanos
    ========================================================================== */
 
-.contacto-info { display: flex; flex-direction: column; gap: 20px; padding: 32px 0; }
+.contacto-info { display: flex; flex-direction: column; gap: 20px; }
 
 .info-card {
   background: #ffffff;
@@ -1391,6 +1392,11 @@ img { max-width: 100%; height: auto; display: block; }
 .info-card-row { display: grid; grid-template-columns: 1fr; gap: 20px; }
 
 .horarios-mini {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1403,6 +1409,8 @@ img { max-width: 100%; height: auto; display: block; }
   padding-bottom: 12px;
   border-bottom: 1px solid var(--color-border);
 }
+
+.horarios-mini__head .material-symbols-outlined { color: var(--color-primary); }
 
 .horarios-mini__head h3 { font-size: 1rem; margin: 0; }
 
@@ -1658,6 +1666,46 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .wpcf7-form-control-wrap { display: block; }
+
+/* Icono decorativo dentro de cada campo (como en el diseño original) */
+.wpcf7-form-control-wrap[data-name="nombre"],
+.wpcf7-form-control-wrap[data-name="email"],
+.wpcf7-form-control-wrap[data-name="telefono"],
+.wpcf7-form-control-wrap[data-name="modalidad"] {
+  position: relative;
+}
+
+.wpcf7-form-control-wrap[data-name="nombre"] input,
+.wpcf7-form-control-wrap[data-name="email"] input,
+.wpcf7-form-control-wrap[data-name="telefono"] input,
+.wpcf7-form-control-wrap[data-name="modalidad"] select {
+  padding-right: 44px;
+}
+
+.wpcf7-form-control-wrap[data-name="nombre"]::after,
+.wpcf7-form-control-wrap[data-name="email"]::after,
+.wpcf7-form-control-wrap[data-name="telefono"]::after,
+.wpcf7-form-control-wrap[data-name="modalidad"]::after {
+  font-family: 'Material Symbols Outlined';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-meta);
+  pointer-events: none;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.wpcf7-form-control-wrap[data-name="nombre"]::after { content: 'person'; }
+.wpcf7-form-control-wrap[data-name="email"]::after { content: 'mail'; }
+.wpcf7-form-control-wrap[data-name="telefono"]::after { content: 'phone_iphone'; }
+.wpcf7-form-control-wrap[data-name="modalidad"]::after { content: 'expand_more'; }
+
+.wpcf7-form-control-wrap[data-name="modalidad"] select {
+  appearance: none;
+  -webkit-appearance: none;
+}
 
 .wpcf7-not-valid-tip {
   display: block;

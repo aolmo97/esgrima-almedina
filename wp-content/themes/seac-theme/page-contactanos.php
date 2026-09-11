@@ -90,21 +90,19 @@ $mapa_url   = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode(
 				</div>
 
 				<?php if ( $horarios ) : ?>
-					<div class="info-card horarios-mini" style="align-items:stretch;">
-						<div style="width:100%;">
-							<div class="horarios-mini__head">
-								<span class="material-symbols-outlined" aria-hidden="true" style="color:var(--color-primary);">schedule</span>
-								<h3><?php esc_html_e( 'Horarios de asaltos y pistas', 'seac' ); ?></h3>
-							</div>
-							<div class="horarios-mini__grid">
-								<?php foreach ( $horarios as $slot ) : ?>
-									<div class="horarios-mini__item">
-										<span class="horarios-mini__categoria"><?php echo esc_html( $slot['categoria'] ); ?></span>
-										<span class="horarios-mini__hora"><?php echo esc_html( trim( $slot['hora_inicio'] . ( $slot['hora_inicio'] && $slot['hora_fin'] ? ' – ' : '' ) . $slot['hora_fin'] ) ); ?></span>
-										<span class="horarios-mini__dias"><?php echo esc_html( $slot['dias'] ); ?></span>
-									</div>
-								<?php endforeach; ?>
-							</div>
+					<div class="horarios-mini">
+						<div class="horarios-mini__head">
+							<span class="material-symbols-outlined" aria-hidden="true">schedule</span>
+							<h3><?php esc_html_e( 'Horarios de asaltos y pistas', 'seac' ); ?></h3>
+						</div>
+						<div class="horarios-mini__grid">
+							<?php foreach ( $horarios as $slot ) : ?>
+								<div class="horarios-mini__item">
+									<span class="horarios-mini__categoria"><?php echo esc_html( $slot['categoria'] ); ?></span>
+									<span class="horarios-mini__hora"><?php echo esc_html( trim( $slot['hora_inicio'] . ( $slot['hora_inicio'] && $slot['hora_fin'] ? ' – ' : '' ) . $slot['hora_fin'] ) ); ?></span>
+									<span class="horarios-mini__dias"><?php echo esc_html( $slot['dias'] ); ?></span>
+								</div>
+							<?php endforeach; ?>
 						</div>
 					</div>
 				<?php endif; ?>
