@@ -23,7 +23,7 @@ function seac_theme_scripts() {
     // Tipografías y set de iconos del sistema de diseño aprobado ("Kinetic Blade").
     wp_enqueue_style( 'seac-fonts', 'https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap', array(), null );
     wp_enqueue_style( 'seac-material-symbols', 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0&display=swap', array(), null );
-    wp_enqueue_style( 'seac-style', get_stylesheet_uri(), array( 'seac-fonts', 'seac-material-symbols' ), '0.8' );
+    wp_enqueue_style( 'seac-style', get_stylesheet_uri(), array( 'seac-fonts', 'seac-material-symbols' ), '1.2' );
     wp_enqueue_script( 'seac-main', get_stylesheet_directory_uri() . '/assets/js/main.js', array(), '0.1', true );
 }
 add_action( 'wp_enqueue_scripts', 'seac_theme_scripts' );
