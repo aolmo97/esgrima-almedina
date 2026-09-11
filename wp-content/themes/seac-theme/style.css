@@ -846,15 +846,16 @@ img { max-width: 100%; height: auto; display: block; }
 
 .horarios-cta__eyebrow {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   color: var(--color-primary-dark);
   font-family: var(--font-heading);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  text-align: left;
 }
+
+.horarios-cta__eyebrow .material-symbols-outlined { flex-shrink: 0; margin-top: 1px; }
 
 .horarios-cta__title { margin: 0; font-size: 1.35rem; }
 
@@ -1361,6 +1362,8 @@ img { max-width: 100%; height: auto; display: block; }
 
 .info-card:hover { box-shadow: var(--shadow-md); border-color: var(--color-border); }
 
+.info-card > div { min-width: 0; }
+
 .info-card__icon {
   width: 40px;
   height: 40px;
@@ -1385,7 +1388,7 @@ img { max-width: 100%; height: auto; display: block; }
   margin-bottom: 4px;
 }
 
-.info-card__value { color: var(--color-text-light); font-weight: 500; margin: 0; }
+.info-card__value { color: var(--color-text-light); font-weight: 500; margin: 0; overflow-wrap: break-word; word-break: break-word; }
 .info-card__value a { color: var(--color-text-light); text-decoration: none; }
 .info-card__value a:hover { color: var(--color-primary); }
 
