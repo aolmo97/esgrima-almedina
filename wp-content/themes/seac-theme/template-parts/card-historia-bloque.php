@@ -105,7 +105,7 @@ $wrapper_class .= $es_reverse ? ' card-bloque--reverse' : '';
 			<div class="card-bloque__gallery">
 				<?php foreach ( $galeria as $imagen ) : ?>
 					<div class="card-bloque__gallery-item">
-						<?php echo wp_get_attachment_image( $imagen['ID'], 'medium' ); ?>
+						<?php echo wp_get_attachment_image( $imagen['ID'], 'medium_large' ); ?>
 						<?php if ( ! empty( $imagen['caption'] ) ) : ?>
 							<span class="card-bloque__gallery-caption"><?php echo esc_html( $imagen['caption'] ); ?></span>
 						<?php endif; ?>
