@@ -644,12 +644,15 @@ img { max-width: 100%; height: auto; display: block; }
 
 .card-modalidad {
   position: relative;
+  display: block;
   text-align: left;
   background: #ffffff;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
+  color: inherit;
+  text-decoration: none;
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
@@ -711,6 +714,21 @@ img { max-width: 100%; height: auto; display: block; }
   line-height: 1.6;
   margin: 0;
 }
+
+.card-modalidad__cta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  padding: 8px 24px 24px;
+}
+
+.card-modalidad__desc:has(+ .card-modalidad__cta) { padding-bottom: 0; }
+
+.card-modalidad__cta .material-symbols-outlined { font-size: 20px; transition: transform 0.2s ease; }
+.card-modalidad:hover .card-modalidad__cta .material-symbols-outlined { transform: translateX(4px); }
 
 /* padding wrapper (el borde/fondo va en .card-modalidad, el relleno en el contenido) */
 .card-modalidad__top,
@@ -1158,6 +1176,41 @@ img { max-width: 100%; height: auto; display: block; }
 /* --- Equipo --- */
 
 .section-equipo { padding: 16px 0 56px; display: flex; flex-direction: column; gap: 32px; }
+
+/* ==========================================================================
+   Página de arma — Vídeos
+   ========================================================================== */
+.grid-videos-arma { grid-template-columns: 1fr; }
+
+.card-video {
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  padding: 0;
+  text-align: left;
+}
+
+.card-video__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.card-video__media iframe,
+.card-video__media embed,
+.card-video__media object {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.card-video__title { font-size: 1.1rem; margin: 16px 24px 4px; }
+.card-video__desc { color: var(--color-text-muted); line-height: 1.6; margin: 0 24px 20px; }
 
 .equipo-destacado {
   position: relative;
@@ -1848,6 +1901,8 @@ img { max-width: 100%; height: auto; display: block; }
   .grid-equipo { grid-template-columns: repeat(2, 1fr); }
 
   .grid-galeria { grid-template-columns: repeat(2, 1fr); }
+
+  .grid-videos-arma { grid-template-columns: repeat(2, 1fr); }
 
   .hero__title { font-size: 2.75rem; }
 

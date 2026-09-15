@@ -99,6 +99,26 @@ acf_add_local_field_group( array(
     'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'miembro_equipo' ) ) ),
 ) );
 
+// ---------- PÁGINA DE ARMA (Florete / Espada / Sable) ----------
+acf_add_local_field_group( array(
+    'key' => 'group_pagina_arma',
+    'title' => 'Página de arma — Vídeos',
+    'fields' => array(
+        array( 'key' => 'field_arma_subtitulo', 'label' => 'Subtítulo / introducción', 'name' => 'subtitulo', 'type' => 'textarea',
+            'instructions' => 'Texto breve bajo el título de la página. Opcional.', 'rows' => 2 ),
+        array(
+            'key' => 'field_arma_videos', 'label' => 'Vídeos', 'name' => 'videos', 'type' => 'repeater',
+            'layout' => 'block', 'button_label' => 'Añadir vídeo',
+            'sub_fields' => array(
+                array( 'key' => 'field_arma_video_titulo', 'label' => 'Título', 'name' => 'titulo', 'type' => 'text' ),
+                array( 'key' => 'field_arma_video_url', 'label' => 'Vídeo (YouTube / Vimeo)', 'name' => 'video_url', 'type' => 'oembed' ),
+                array( 'key' => 'field_arma_video_desc', 'label' => 'Descripción (opcional)', 'name' => 'descripcion', 'type' => 'textarea', 'rows' => 2 ),
+            ),
+        ),
+    ),
+    'location' => array( array( array( 'param' => 'page_template', 'operator' => '==', 'value' => 'page-arma.php' ) ) ),
+) );
+
 // ---------- CONTÁCTANOS ----------
 acf_add_local_field_group( array(
     'key' => 'group_contactanos',
