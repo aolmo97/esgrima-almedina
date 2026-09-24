@@ -5,6 +5,23 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/**
+ * El sitio corre detrás de un proxy (Traefik/Coolify) que termina el HTTPS;
+ * wp-config.php ya marca $_SERVER['HTTPS']='on' cuando llega por ahí, pero
+ * las opciones "siteurl"/"home" siguen guardadas como http://. Cuando
+ * WordPress necesita emitir una redirección canónica (p.ej. Polylang
+ * resolviendo /en/ a la home en inglés), a veces construye esa URL en
+ * http:// aunque la visita sea https, y el proxy la vuelve a mandar a
+ * https, creando un bucle infinito. Forzamos aquí el esquema real de la
+ * visita en cualquier redirección canónica.
+ */
+add_filter( 'redirect_canonical', function ( $redirect_url ) {
+    if ( $redirect_url && is_ssl() ) {
+        $redirect_url = set_url_scheme( $redirect_url, 'https' );
+    }
+    return $redirect_url;
+} );
+
 function seac_theme_setup() {
     add_theme_support( 'title-tag' );
     add_theme_support( 'post-thumbnails' );
