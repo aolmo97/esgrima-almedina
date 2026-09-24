@@ -22,6 +22,19 @@ add_filter( 'redirect_canonical', function ( $redirect_url ) {
     return $redirect_url;
 } );
 
+/**
+ * Mismo problema que arriba pero para el resto de redirecciones (p.ej. la
+ * de Polylang al detectar el idioma del navegador en la primera visita,
+ * que no pasa por el filtro "redirect_canonical"). wp_redirect()/
+ * wp_safe_redirect() sí pasan todas por este filtro.
+ */
+add_filter( 'wp_redirect', function ( $location ) {
+    if ( $location && is_ssl() ) {
+        $location = set_url_scheme( $location, 'https' );
+    }
+    return $location;
+} );
+
 function seac_theme_setup() {
     add_theme_support( 'title-tag' );
     add_theme_support( 'post-thumbnails' );
