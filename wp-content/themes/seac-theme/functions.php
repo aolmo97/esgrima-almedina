@@ -158,6 +158,22 @@ function seac_member_bio( $member_id ) {
     return get_field( 'biografia', $member_id );
 }
 
+/**
+ * Descripción del club en el footer, en el idioma actual: los campos de
+ * "Ajustes del sitio" (Options Page de ACF) no los traduce Polylang, así
+ * que usamos el mismo patrón que seac_member_bio() (campo "_en" opcional
+ * con fallback al español).
+ */
+function seac_footer_descripcion() {
+    if ( function_exists( 'pll_current_language' ) && 'en' === pll_current_language() ) {
+        $desc_en = seac_option( 'footer_descripcion_en', '' );
+        if ( $desc_en ) {
+            return $desc_en;
+        }
+    }
+    return seac_option( 'footer_descripcion', '' );
+}
+
 function seac_theme_scripts() {
     // Tipografías y set de iconos del sistema de diseño aprobado ("Kinetic Blade").
     wp_enqueue_style( 'seac-fonts', 'https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap', array(), null );

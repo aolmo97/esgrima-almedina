@@ -154,6 +154,8 @@ if ( function_exists( 'acf_add_options_page' ) ) {
             array( 'key' => 'field_ajustes_tab_footer', 'label' => 'Pie de página', 'type' => 'tab' ),
             array( 'key' => 'field_footer_descripcion', 'label' => 'Descripción del club', 'name' => 'footer_descripcion', 'type' => 'textarea',
                 'default_value' => 'Forjando esgrimistas y pasión deportiva en Córdoba desde 2012. Precisión táctica, disciplina atlética y rendimiento de élite.', 'rows' => 3 ),
+            array( 'key' => 'field_footer_descripcion_en', 'label' => 'Descripción del club (inglés)', 'name' => 'footer_descripcion_en', 'type' => 'textarea',
+                'instructions' => 'Opcional. Si se deja vacío, la web en inglés muestra la descripción en español.', 'rows' => 3 ),
             array( 'key' => 'field_footer_anio', 'label' => 'Año de fundación (badge "EST.")', 'name' => 'footer_anio_fundacion', 'type' => 'text',
                 'default_value' => '2012' ),
             array( 'key' => 'field_footer_ubicacion', 'label' => 'Ubicación (texto corto)', 'name' => 'footer_ubicacion', 'type' => 'text',

@@ -14,7 +14,7 @@ $contacto_id = seac_get_page_id_by_template( 'page-contactanos.php' );
 
 $logo_id       = seac_option( 'logo_sitio' );
 $nombre_marca  = seac_option( 'nombre_marca', get_bloginfo( 'name' ) );
-$footer_desc   = seac_option( 'footer_descripcion', '' );
+$footer_desc   = seac_footer_descripcion();
 $footer_anio   = seac_option( 'footer_anio_fundacion', '' );
 $footer_ubic   = seac_option( 'footer_ubicacion', '' );
 
