@@ -6,6 +6,20 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
+ * Causa real del "http:// en vez de https://" en los enlaces generados por
+ * Polylang (selector de idioma, logo, etc.): Polylang cachea el home_url de
+ * cada idioma (PLL_CACHE_HOME_URL, activado por defecto) la primera vez que
+ * se calcula. Ese primer cálculo ocurrió en un contexto WP-CLI (el script de
+ * migración de idiomas), donde no hay petición HTTP real y por tanto
+ * is_ssl() es falso — así que quedó cacheado en http:// para siempre, sin
+ * importar que las visitas reales sean por https. Desactivamos ese caché
+ * para que Polylang recalcule el home_url en cada petición real.
+ */
+if ( ! defined( 'PLL_CACHE_HOME_URL' ) ) {
+    define( 'PLL_CACHE_HOME_URL', false );
+}
+
+/**
  * El sitio corre detrás de un proxy (Traefik/Coolify) que termina el HTTPS;
  * wp-config.php ya marca $_SERVER['HTTPS']='on' cuando llega por ahí, pero
  * las opciones "siteurl"/"home" siguen guardadas como http://. Cuando
@@ -148,8 +162,12 @@ function seac_theme_scripts() {
     // Tipografías y set de iconos del sistema de diseño aprobado ("Kinetic Blade").
     wp_enqueue_style( 'seac-fonts', 'https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap', array(), null );
     wp_enqueue_style( 'seac-material-symbols', 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0&display=swap', array(), null );
-    wp_enqueue_style( 'seac-style', get_stylesheet_uri(), array( 'seac-fonts', 'seac-material-symbols' ), '1.7' );
-    wp_enqueue_script( 'seac-main', get_stylesheet_directory_uri() . '/assets/js/main.js', array(), '0.1', true );
+    // Version atada a la cabecera "Version:" de style.css: así cada bump de
+    // versión rompe la caché del navegador automáticamente, sin tener que
+    // acordarse de subir un número de versión suelto aquí también.
+    $seac_version = wp_get_theme()->get( 'Version' );
+    wp_enqueue_style( 'seac-style', get_stylesheet_uri(), array( 'seac-fonts', 'seac-material-symbols' ), $seac_version );
+    wp_enqueue_script( 'seac-main', get_stylesheet_directory_uri() . '/assets/js/main.js', array(), $seac_version, true );
 }
 add_action( 'wp_enqueue_scripts', 'seac_theme_scripts' );
 
