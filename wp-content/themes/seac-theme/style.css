@@ -3,7 +3,7 @@
 Theme Name: SEAC Theme
 Description: Tema personalizado para la Sala de Esgrima Almedina Córdoba (S.E.A.C.)
 Author: Antonio
-Version: 0.4
+Version: 0.5
 Text Domain: seac
 Domain Path: /languages
 */
@@ -727,15 +727,17 @@ img { max-width: 100%; height: auto; display: block; }
 .card-modalidad__icon img { max-width: 28px; max-height: 28px; }
 
 .card-modalidad__index {
-  font-family: var(--font-heading);
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
   color: var(--color-text-muted);
   background: var(--color-surface-2-high);
   border-radius: var(--radius-sm);
-  padding: 2px 8px;
 }
+
+.card-modalidad__index .material-symbols-outlined { font-size: 16px; }
 
 .card-modalidad__title {
   font-size: 1.35rem;

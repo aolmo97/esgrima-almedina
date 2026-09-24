@@ -5,7 +5,8 @@
  *
  * Se invoca con get_template_part( 'template-parts/card-modalidad', null, $args )
  * pasando $args = array( 'index' => 1, 'nombre' => ..., 'icono' => <array ACF image>, 'descripcion' => ... ).
- * "index" es solo el número de orden dentro del loop, para la etiqueta MOD-0x (decorativa).
+ * "index" es solo el número de orden dentro del loop: controla si se pinta
+ * el icono decorativo de la esquina (no se usa como número visible).
  *
  * Si existe una página con plantilla "page-arma.php" cuyo slug coincide con el
  * nombre de la modalidad (p.ej. nombre "Florete" -> slug "florete"), la tarjeta
@@ -37,7 +38,9 @@ $tag = $enlace ? 'a' : 'article';
 		<?php endif; ?>
 
 		<?php if ( $index ) : ?>
-			<span class="card-modalidad__index">MOD-<?php echo esc_html( str_pad( $index, 2, '0', STR_PAD_LEFT ) ); ?></span>
+			<span class="card-modalidad__index">
+				<span class="material-symbols-outlined" aria-hidden="true">swords</span>
+			</span>
 		<?php endif; ?>
 	</div>
 
