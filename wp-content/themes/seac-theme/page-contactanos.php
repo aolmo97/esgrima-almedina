@@ -146,7 +146,7 @@ $mapa_url   = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode(
 			</div>
 
 			<div class="contacto-form-card">
-				<?php echo do_shortcode( '[contact-form-7 title="Contacto SEAC"]' ); ?>
+				<?php echo do_shortcode( '[contact-form-7 title="' . esc_attr( seac_contact_form_title() ) . '"]' ); ?>
 			</div>
 
 			<div class="valueprops">

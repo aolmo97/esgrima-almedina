@@ -55,7 +55,7 @@ $wrapper_class .= $es_reverse ? ' card-bloque--reverse' : '';
 <article class="<?php echo esc_attr( $wrapper_class ); ?>">
 
 	<div class="card-bloque__badge-row">
-		<span class="card-bloque__badge"><?php echo esc_html( sprintf( 'BLOQUE %s', str_pad( $index, 2, '0', STR_PAD_LEFT ) ) ); ?></span>
+		<span class="card-bloque__badge"><?php echo esc_html( sprintf( __( 'BLOQUE %s', 'seac' ), str_pad( $index, 2, '0', STR_PAD_LEFT ) ) ); ?></span>
 		<?php if ( $etiqueta ) : ?>
 			<span class="card-bloque__etiqueta"><?php echo esc_html( $etiqueta ); ?></span>
 		<?php endif; ?>

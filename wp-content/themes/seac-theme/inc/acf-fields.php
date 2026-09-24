@@ -94,6 +94,8 @@ acf_add_local_field_group( array(
         array( 'key' => 'field_me_mano', 'label' => 'Mano', 'name' => 'mano', 'type' => 'select',
             'choices' => array( 'diestro' => 'Diestro', 'zurdo' => 'Zurdo' ) ),
         array( 'key' => 'field_me_bio', 'label' => 'Biografía', 'name' => 'biografia', 'type' => 'textarea' ),
+        array( 'key' => 'field_me_bio_en', 'label' => 'Biografía (inglés)', 'name' => 'biografia_en', 'type' => 'textarea',
+            'instructions' => 'Opcional. Si se deja vacío, la web en inglés muestra la biografía en español.' ),
         array( 'key' => 'field_me_destacado', 'label' => '¿Es el maestro / destacado?', 'name' => 'destacado', 'type' => 'true_false' ),
     ),
     'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'miembro_equipo' ) ) ),

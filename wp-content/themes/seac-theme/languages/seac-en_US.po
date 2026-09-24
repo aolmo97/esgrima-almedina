@@ -1,0 +1,261 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SEAC Theme\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-24 00:00+0000\n"
+"PO-Revision-Date: 2026-09-24 00:00+0000\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: seac\n"
+
+msgid "Ajustes del sitio"
+msgstr "Site settings"
+
+msgid "Arma: %s"
+msgstr "Weapon: %s"
+
+msgid "BLOQUE %s"
+msgstr "BLOCK %s"
+
+msgid "Contáctanos"
+msgstr "Contact us"
+
+msgid "Diestro"
+msgstr "Right-handed"
+
+msgid "Espada"
+msgstr "Épée"
+
+msgid "España"
+msgstr "Spain"
+
+msgid "EST. %s"
+msgstr "EST. %s"
+
+msgid "Florete"
+msgstr "Foil"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Horarios"
+msgstr "Schedule"
+
+msgid "Italia"
+msgstr "Italy"
+
+msgid "Mano: %s"
+msgstr "Hand: %s"
+
+msgid "Menú footer"
+msgstr "Footer menu"
+
+msgid "Menú principal"
+msgstr "Main menu"
+
+msgid "Modalidades"
+msgstr "Weapons"
+
+msgid "Polonia"
+msgstr "Poland"
+
+msgid "Quiénes somos"
+msgstr "About us"
+
+msgid "Sable"
+msgstr "Sabre"
+
+msgid "Zurdo"
+msgstr "Left-handed"
+
+msgid "Selector de idioma"
+msgstr "Language switcher"
+
+msgid "¿Quieres entrenar con nuestro equipo?"
+msgstr "Want to train with our team?"
+
+msgid "Abrir en Google Maps"
+msgstr "Open in Google Maps"
+
+msgid "Abrir menú"
+msgstr "Open menu"
+
+msgid "Armas oficiales"
+msgstr "Official weapons"
+
+msgid "Calendario de pista"
+msgstr "Salle schedule"
+
+msgid "Careta, chaquetilla, guante y arma proporcionados por la sala durante tu iniciación."
+msgstr "Mask, jacket, glove and weapon provided by the club during your introductory classes."
+
+msgid "Categoría y grupo"
+msgstr "Category and group"
+
+msgid "Club de Esgrima Oficial · Fencing Academy"
+msgstr "Official Fencing Club · Fencing Academy"
+
+msgid "Comunidad & Redes"
+msgstr "Community & Social"
+
+msgid "Conócenos"
+msgstr "About us"
+
+msgid "Contactar sala"
+msgstr "Contact the club"
+
+msgid "Córdoba, España"
+msgstr "Córdoba, Spain"
+
+msgid "Días de entrenamiento"
+msgstr "Training days"
+
+msgid "Dirección de la sede"
+msgstr "Club address"
+
+msgid "Disciplinas oficiales"
+msgstr "Official disciplines"
+
+msgid "Domina las tres armas de la esgrima moderna con maestros titulados por la RFEE."
+msgstr "Master the three weapons of modern fencing with coaches certified by the Royal Spanish Fencing Federation (RFEE)."
+
+msgid "Entrenamiento guiado por maestros acreditados por la RFEE."
+msgstr "Training led by coaches certified by the RFEE."
+
+msgid "Entrenamientos estructurados por nivel y grupo de edad en pista homologada."
+msgstr "Structured training sessions by level and age group on a certified piste."
+
+msgid "Equipación completa proporcionada por el club para principiantes"
+msgstr "Full equipment provided by the club for beginners"
+
+msgid "Esgrima olímpica e histórica en Andalucía"
+msgstr "Olympic and historical fencing in Andalusia"
+
+msgid "Estructura técnica y deportiva"
+msgstr "Technical and sporting structure"
+
+msgid "Fundación club"
+msgstr "Club founded"
+
+msgid "Historia · Identidad · Maestría"
+msgstr "History · Identity · Mastery"
+
+msgid "Horario"
+msgstr "Schedule"
+
+msgid "Horarios de asaltos y pistas"
+msgstr "Bout and piste schedule"
+
+msgid "Horarios y grupos"
+msgstr "Schedule and groups"
+
+msgid "Inscripciones abiertas"
+msgstr "Enrolment open"
+
+msgid "Instantáneas de alta intensidad competitiva en S.E.A.C."
+msgstr "High-intensity competitive snapshots at S.E.A.C."
+
+msgid "Maestro / Destacado"
+msgstr "Head coach / Featured"
+
+msgid "Maestro de Armas · Director Técnico"
+msgstr "Fencing Master · Technical Director"
+
+msgid "Maestros titulados"
+msgstr "Certified coaches"
+
+msgid "Maestros y cuerpo técnico"
+msgstr "Coaches and technical staff"
+
+msgid "Material incluido"
+msgstr "Equipment included"
+
+msgid "Modalidad de combate"
+msgstr "Fencing weapon"
+
+msgid "Modalidades de combate"
+msgstr "Fencing weapons"
+
+msgid "Momentos en pista"
+msgstr "Moments on the piste"
+
+msgid "Navegación"
+msgstr "Navigation"
+
+msgid "No se ha encontrado contenido."
+msgstr "No content found."
+
+msgid "Pista homologada"
+msgstr "Certified piste"
+
+msgid "Primera clase de prueba sin compromiso de equipación."
+msgstr "First trial class with no equipment commitment."
+
+msgid "Profesionales dedicados al desarrollo integral de cada esgrimista."
+msgstr "Professionals dedicated to the all-round development of every fencer."
+
+msgid "Prueba gratis / Contacto"
+msgstr "Free trial / Contact"
+
+msgid "Registro activo"
+msgstr "Active enrolment"
+
+msgid "Registro visual oficial"
+msgstr "Official photo record"
+
+msgid "Rellena el formulario y nuestro equipo se pondrá en contacto contigo en menos de 24 horas."
+msgstr "Fill in the form and our team will get back to you within 24 hours."
+
+msgid "S.E.A.C. · Córdoba Base"
+msgstr "S.E.A.C. · Córdoba Base"
+
+msgid "Sala de Armas Almedina"
+msgstr "Almedina Fencing Salle"
+
+msgid "Sala de Esgrima Almedina de Córdoba (España). Todos los derechos reservados."
+msgstr "Sala de Esgrima Almedina de Córdoba (Spain). All rights reserved."
+
+msgid "Secretaría y admisiones"
+msgstr "Front desk & admissions"
+
+msgid "Sin compromiso"
+msgstr "No commitment"
+
+msgid "Sin compromiso. Te proporcionamos la careta, el traje y la espada para tu primer asalto."
+msgstr "No commitment. We provide the mask, suit and weapon for your first bout."
+
+msgid "Solicita información o tu clase de prueba gratuita"
+msgstr "Request information or your free trial class"
+
+msgid "Solicita tu clase de prueba"
+msgstr "Book your trial class"
+
+msgid "Técnica en movimiento"
+msgstr "Technique in motion"
+
+msgid "Teléfono y WhatsApp"
+msgstr "Phone & WhatsApp"
+
+msgid "Tradición andaluza, vanguardia táctica y pasión por la esgrima en Córdoba."
+msgstr "Andalusian tradition, tactical innovation and a passion for fencing in Córdoba."
+
+msgid "Tu primera clase introductoria es totalmente gratuita."
+msgstr "Your first introductory class is completely free."
+
+msgid "Ven a conocer la Sala de Esgrima Almedina en Córdoba. Te prestamos todo el material homologado para tu primera sesión sin compromiso."
+msgstr "Come visit Sala de Esgrima Almedina in Córdoba. We lend you all the certified equipment for your first, no-commitment session."
+
+msgid "Ven con ropa deportiva cómoda. Nosotros te facilitamos careta, chaquetilla, guante y espada reglamentaria."
+msgstr "Come in comfortable sportswear. We provide the regulation mask, jacket, glove and weapon."
+
+msgid "Ver vídeos"
+msgstr "Watch videos"
+
+msgid "Vídeos"
+msgstr "Videos"
+
+msgid "Vista táctica S.E.A.C."
+msgstr "S.E.A.C. tactical view"

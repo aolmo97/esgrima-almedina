@@ -65,6 +65,24 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<span class="material-symbols-outlined" aria-hidden="true">bolt</span>
 				<?php esc_html_e( 'Prueba gratis / Contacto', 'seac' ); ?>
 			</a>
+
+			<?php if ( function_exists( 'pll_the_languages' ) ) : ?>
+				<ul class="lang-switcher" aria-label="<?php esc_attr_e( 'Selector de idioma', 'seac' ); ?>">
+					<?php
+					$idiomas = pll_the_languages( array( 'raw' => 1, 'hide_if_empty' => false ) );
+					foreach ( (array) $idiomas as $idioma ) :
+						?>
+						<li>
+							<a href="<?php echo esc_url( $idioma['url'] ); ?>"
+								class="lang-switcher__link<?php echo $idioma['current_lang'] ? ' is-current' : ''; ?>"
+								hreflang="<?php echo esc_attr( $idioma['locale'] ); ?>"
+								<?php echo $idioma['current_lang'] ? ' aria-current="true"' : ''; ?>>
+								<?php echo esc_html( strtoupper( $idioma['slug'] ) ); ?>
+							</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
 		</nav>
 
 	</div>

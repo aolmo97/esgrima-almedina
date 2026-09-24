@@ -21,10 +21,11 @@ if ( ! $member_id ) {
 $nacionalidad = get_field( 'nacionalidad', $member_id );
 $arma         = get_field( 'arma', $member_id );
 $mano         = get_field( 'mano', $member_id );
-$biografia    = get_field( 'biografia', $member_id );
+$biografia    = seac_member_bio( $member_id );
 
-$arma_label = $arma ? ucfirst( $arma ) : '';
-$mano_label = $mano ? ucfirst( $mano ) : '';
+$nacionalidad_label = $nacionalidad ? seac_nacionalidad_label( $nacionalidad ) : '';
+$arma_label         = $arma ? seac_arma_label( $arma ) : '';
+$mano_label         = $mano ? seac_mano_label( $mano ) : '';
 ?>
 
 <?php if ( $featured ) : ?>
@@ -51,8 +52,8 @@ $mano_label = $mano ? ucfirst( $mano ) : '';
 				<?php if ( $mano_label ) : ?>
 					<span class="chip"><?php echo esc_html( $mano_label ); ?></span>
 				<?php endif; ?>
-				<?php if ( $nacionalidad ) : ?>
-					<span class="chip chip--accent"><?php echo esc_html( $nacionalidad ); ?></span>
+				<?php if ( $nacionalidad_label ) : ?>
+					<span class="chip chip--accent"><?php echo esc_html( $nacionalidad_label ); ?></span>
 				<?php endif; ?>
 			</div>
 
@@ -79,8 +80,8 @@ $mano_label = $mano ? ucfirst( $mano ) : '';
 
 		<h3 class="card-miembro__nombre"><?php echo esc_html( get_the_title( $member_id ) ); ?></h3>
 
-		<?php if ( $nacionalidad || $arma_label ) : ?>
-			<p class="card-miembro__nacionalidad"><?php echo esc_html( trim( $nacionalidad . ( $nacionalidad && $arma_label ? ' · ' : '' ) . ( $arma_label ? 'Arma: ' . $arma_label : '' ) ) ); ?></p>
+		<?php if ( $nacionalidad_label || $arma_label ) : ?>
+			<p class="card-miembro__nacionalidad"><?php echo esc_html( trim( $nacionalidad_label . ( $nacionalidad_label && $arma_label ? ' · ' : '' ) . ( $arma_label ? sprintf( __( 'Arma: %s', 'seac' ), $arma_label ) : '' ) ) ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( $mano_label ) : ?>
