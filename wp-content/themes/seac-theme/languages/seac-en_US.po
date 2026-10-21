@@ -303,3 +303,9 @@ msgstr "Tell us how you would like to support the club"
 
 msgid "Rellena el formulario y nos pondremos en contacto contigo para explicarte las opciones de patrocinio y colaboración."
 msgstr "Fill in the form and we will get back to you to explain the sponsorship and collaboration options."
+
+msgid "Tu marca aquí"
+msgstr "Your brand here"
+
+msgid "Únete a la familia SEAC"
+msgstr "Join the SEAC family"

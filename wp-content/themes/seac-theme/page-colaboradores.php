@@ -50,13 +50,18 @@ $mecenas        = get_field( 'mecenas' );
 							<div class="colab-card">
 						<?php endif; ?>
 							<?php if ( ! empty( $p['logo'] ) ) : ?>
-								<?php echo wp_get_attachment_image( (int) $p['logo'], 'medium', false, array( 'class' => 'colab-card__logo', 'alt' => $p['nombre'] ) ); ?>
+								<span class="colab-card__logo-box"><?php echo wp_get_attachment_image( (int) $p['logo'], 'medium', false, array( 'class' => 'colab-card__logo', 'alt' => $p['nombre'] ) ); ?></span>
 							<?php endif; ?>
 							<?php if ( ! empty( $p['nombre'] ) ) : ?>
 								<span class="colab-card__name"><?php echo esc_html( $p['nombre'] ); ?></span>
 							<?php endif; ?>
 						<?php echo $con_enlace ? '</a>' : '</div>'; ?>
 					<?php endforeach; ?>
+					<a class="colab-card colab-card--cta" href="#patrocinar">
+						<span class="colab-card__placeholder"><span class="material-symbols-outlined" aria-hidden="true">add_photo_alternate</span></span>
+						<span class="colab-card__name"><?php esc_html_e( 'Tu marca aquí', 'seac' ); ?></span>
+						<span class="colab-card__more"><?php esc_html_e( 'Únete a la familia SEAC', 'seac' ); ?></span>
+					</a>
 				</div>
 			</div>
 		</section>
@@ -65,7 +70,7 @@ $mecenas        = get_field( 'mecenas' );
 	<?php if ( $mecenas ) : ?>
 		<section class="section section-modalidades">
 			<div class="container">
-				<div class="section__header">
+				<div class="section__header colab-header-center">
 					<div>
 						<h2 class="section__title"><?php esc_html_e( 'Mecenas', 'seac' ); ?></h2>
 						<p class="section__desc"><?php esc_html_e( 'Personas que impulsan el club con su aportación.', 'seac' ); ?></p>
@@ -74,7 +79,7 @@ $mecenas        = get_field( 'mecenas' );
 				<ul class="colab-mecenas">
 					<?php foreach ( $mecenas as $m ) : ?>
 						<?php if ( ! empty( $m['nombre'] ) ) : ?>
-							<li><?php echo esc_html( $m['nombre'] ); ?></li>
+							<li><span class="material-symbols-outlined" aria-hidden="true">favorite</span><?php echo esc_html( $m['nombre'] ); ?></li>
 						<?php endif; ?>
 					<?php endforeach; ?>
 				</ul>

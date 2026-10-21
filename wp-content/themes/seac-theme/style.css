@@ -3,7 +3,7 @@
 Theme Name: SEAC Theme
 Description: Tema personalizado para la Sala de Esgrima Almedina Córdoba (S.E.A.C.)
 Author: Antonio
-Version: 0.6
+Version: 0.8
 Text Domain: seac
 Domain Path: /languages
 */
@@ -2030,15 +2030,34 @@ img { max-width: 100%; height: auto; display: block; }
 /* ===== Colaboradores ===== */
 .colab-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 .colab-card {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-  padding: 24px; min-height: 160px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px; min-height: 200px; text-align: center;
   background: var(--color-surface-container-lowest); border: 1px solid var(--color-border);
-  border-radius: 12px; color: inherit; text-decoration: none; transition: box-shadow .2s, border-color .2s;
+  border-radius: 12px; box-shadow: var(--shadow-sm, 0 1px 2px rgba(15,23,42,.06)); color: inherit; text-decoration: none;
+  transition: box-shadow .2s, border-color .2s;
 }
-a.colab-card:hover { box-shadow: var(--shadow-md); border-color: var(--color-tint-border); }
-.colab-card__logo { max-width: 100%; max-height: 90px; width: auto; height: auto; object-fit: contain; }
-.colab-card__name { font-weight: 600; }
-.colab-mecenas { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
-.colab-mecenas li { padding: 8px 16px; border: 1px solid var(--color-border); border-radius: 999px; background: var(--color-surface-container-lowest); font-weight: 500; }
-@media (min-width: 768px) { .colab-grid { grid-template-columns: repeat(3, 1fr); } }
+.colab-card:hover { box-shadow: var(--shadow-md); }
+a.colab-card:hover { border-color: var(--color-tint-border); }
+.colab-card__logo-box { width: 100%; height: 90px; display: flex; align-items: center; justify-content: center; }
+.colab-card__logo { max-width: 100%; max-height: 90px; width: auto; height: auto; object-fit: contain; transition: transform .2s; }
+.colab-card:hover .colab-card__logo { transform: scale(1.05); }
+.colab-card__name { font-weight: 600; line-height: 1.3; }
+.colab-card--cta { justify-content: center; border: 2px dashed #6ee7b7; background: rgba(236,253,245,.4); }
+.colab-card--cta:hover { background: rgba(236,253,245,.8); border-color: var(--color-primary); }
+.colab-card--cta .colab-card__name { color: var(--color-primary); }
+.colab-card__placeholder { width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; border: 2px dashed #a7f3d0; border-radius: 8px; background: #fff; color: var(--color-primary); }
+.colab-card__placeholder .material-symbols-outlined { font-size: 32px; }
+.colab-card__more { font-size: .85rem; color: var(--color-text-muted); }
+.colab-header-center { justify-content: center; text-align: center; }
+.colab-mecenas { list-style: none; margin: 0 auto; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 900px; }
+.colab-mecenas li { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid var(--color-border); border-radius: 999px; background: var(--color-surface-container-lowest); box-shadow: var(--shadow-sm, 0 1px 2px rgba(15,23,42,.06)); font-weight: 500; transition: border-color .2s; }
+.colab-mecenas li:hover { border-color: var(--color-tint-border); }
+.colab-mecenas li .material-symbols-outlined { font-size: 18px; color: var(--color-primary); }
+@media (min-width: 768px) { .colab-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; } .colab-card { padding: 24px; min-height: 240px; } }
 @media (min-width: 1024px) { .colab-grid { grid-template-columns: repeat(4, 1fr); } }
+
+/* Colaboradores: bloques más compactos (el .section genérico deja 120px entre bloques) */
+.page-template-page-colaboradores .section { padding: 32px 0; }
+.page-template-page-colaboradores .section-modalidades { padding: 40px 0; }
+.page-template-page-colaboradores .contacto-form-section { padding: 40px 0 56px; }
+.page-template-page-colaboradores .section__header { margin-bottom: 20px; }
