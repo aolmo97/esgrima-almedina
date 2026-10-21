@@ -29,6 +29,7 @@ $mecenas        = get_field( 'mecenas' );
 			</span>
 			<h1 class="page-hero__title"><?php the_title(); ?></h1>
 			<p class="page-hero__desc"><?php esc_html_e( 'Gracias a las empresas, instituciones y personas que hacen posible el día a día de la Sala de Esgrima Almedina.', 'seac' ); ?></p>
+			<div class="page-hero__bar"><div class="page-hero__bar-fill"></div></div>
 		</div>
 	</header>
 
