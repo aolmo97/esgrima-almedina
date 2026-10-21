@@ -1,6 +1,31 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// ---------- COLABORADORES ----------
+acf_add_local_field_group( array(
+    'key' => 'group_colaboradores',
+    'title' => 'Colaboradores — Patrocinadores y mecenas',
+    'fields' => array(
+        array(
+            'key' => 'field_colab_patrocinadores', 'label' => 'Patrocinadores', 'name' => 'patrocinadores', 'type' => 'repeater',
+            'layout' => 'table', 'button_label' => 'Añadir patrocinador',
+            'sub_fields' => array(
+                array( 'key' => 'field_patro_nombre', 'label' => 'Nombre', 'name' => 'nombre', 'type' => 'text' ),
+                array( 'key' => 'field_patro_logo', 'label' => 'Logo', 'name' => 'logo', 'type' => 'image', 'return_format' => 'id', 'preview_size' => 'thumbnail' ),
+                array( 'key' => 'field_patro_url', 'label' => 'Web (opcional)', 'name' => 'url', 'type' => 'url' ),
+            ),
+        ),
+        array(
+            'key' => 'field_colab_mecenas', 'label' => 'Mecenas', 'name' => 'mecenas', 'type' => 'repeater',
+            'layout' => 'table', 'button_label' => 'Añadir mecenas',
+            'sub_fields' => array(
+                array( 'key' => 'field_mecenas_nombre', 'label' => 'Nombre', 'name' => 'nombre', 'type' => 'text' ),
+            ),
+        ),
+    ),
+    'location' => array( array( array( 'param' => 'page_template', 'operator' => '==', 'value' => 'page-colaboradores.php' ) ) ),
+) );
+
 // ---------- HOME ----------
 acf_add_local_field_group( array(
     'key' => 'group_home',
@@ -88,8 +113,10 @@ acf_add_local_field_group( array(
     'fields' => array(
         array( 'key' => 'field_me_nacionalidad', 'label' => 'Nacionalidad', 'name' => 'nacionalidad', 'type' => 'text' ),
         array(
-            'key' => 'field_me_arma', 'label' => 'Arma', 'name' => 'arma', 'type' => 'select',
+            'key' => 'field_me_arma', 'label' => 'Armas', 'name' => 'arma', 'type' => 'checkbox',
+            'instructions' => 'Marca todas las armas que tira.',
             'choices' => array( 'espada' => 'Espada', 'florete' => 'Florete', 'sable' => 'Sable' ),
+            'layout' => 'horizontal', 'return_format' => 'value',
         ),
         array( 'key' => 'field_me_mano', 'label' => 'Mano', 'name' => 'mano', 'type' => 'select',
             'choices' => array( 'diestro' => 'Diestro', 'zurdo' => 'Zurdo' ) ),

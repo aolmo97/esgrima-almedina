@@ -24,7 +24,7 @@ $subtitulo = get_field( 'subtitulo' );
 	<header class="page-hero">
 		<div class="container page-hero__inner">
 			<span class="page-hero__eyebrow">
-				<span class="material-symbols-outlined" aria-hidden="true">sports_martial_arts</span>
+				<span class="material-symbols-outlined" aria-hidden="true">swords</span>
 				<?php esc_html_e( 'Modalidad de combate', 'seac' ); ?>
 			</span>
 			<h1 class="page-hero__title"><?php the_title(); ?></h1>

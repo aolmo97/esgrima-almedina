@@ -33,13 +33,17 @@ $redes_iconos = array(
 );
 
 $footer_nav = array(
-	array( 'label' => __( 'Home', 'seac' ), 'url' => home_url( '/' ) ),
+	array( 'label' => __( 'Inicio', 'seac' ), 'url' => home_url( '/' ) ),
 );
 if ( $quienes_id ) {
 	$footer_nav[] = array( 'label' => __( 'Quiénes somos', 'seac' ), 'url' => get_permalink( $quienes_id ) );
 }
 $footer_nav[] = array( 'label' => __( 'Modalidades', 'seac' ), 'url' => home_url( '/#modalidades' ) );
 $footer_nav[] = array( 'label' => __( 'Horarios', 'seac' ), 'url' => home_url( '/#horarios' ) );
+$colab_id = seac_get_page_id_by_template( 'page-colaboradores.php' );
+if ( $colab_id ) {
+	$footer_nav[] = array( 'label' => __( 'Colaboradores', 'seac' ), 'url' => get_permalink( $colab_id ) );
+}
 if ( $contacto_id ) {
 	$footer_nav[] = array( 'label' => __( 'Contáctanos', 'seac' ), 'url' => get_permalink( $contacto_id ) );
 }

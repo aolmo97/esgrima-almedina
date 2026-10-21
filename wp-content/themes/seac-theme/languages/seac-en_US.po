@@ -15,7 +15,9 @@ msgid "Ajustes del sitio"
 msgstr "Site settings"
 
 msgid "Arma: %s"
-msgstr "Weapon: %s"
+msgid_plural "Armas: %s"
+msgstr[0] "Weapon: %s"
+msgstr[1] "Weapons: %s"
 
 msgid "BLOQUE %s"
 msgstr "BLOCK %s"
@@ -38,7 +40,7 @@ msgstr "EST. %s"
 msgid "Florete"
 msgstr "Foil"
 
-msgid "Home"
+msgid "Inicio"
 msgstr "Home"
 
 msgid "Horarios"
@@ -259,3 +261,45 @@ msgstr "Videos"
 
 msgid "Vista táctica S.E.A.C."
 msgstr "S.E.A.C. tactical view"
+
+msgid "Colaboradores"
+msgstr "Partners"
+
+msgid "Quienes nos apoyan"
+msgstr "Who supports us"
+
+msgid "Patrocinadores"
+msgstr "Sponsors"
+
+msgid "Mecenas"
+msgstr "Patrons"
+
+msgid "Gracias a las empresas, instituciones y personas que hacen posible el día a día de la Sala de Esgrima Almedina."
+msgstr "Thanks to the companies, institutions and people who make everyday life at Sala de Esgrima Almedina possible."
+
+msgid "Empresas e instituciones que apoyan al club."
+msgstr "Companies and institutions that support the club."
+
+msgid "Personas que impulsan el club con su aportación."
+msgstr "People who drive the club forward with their contribution."
+
+msgid "Hazte patrocinador"
+msgstr "Become a sponsor"
+
+msgid "Tu marca puede estar en cada asalto."
+msgstr "Your brand can be at every bout."
+
+msgid "Patrocinar al club es apoyar el deporte base en Córdoba: tu marca llega a deportistas, familias y aficionados, y tú ayudas a financiar material, desplazamientos y competiciones."
+msgstr "Sponsoring the club means supporting grassroots sport in Córdoba: your brand reaches athletes, families and fans, and you help fund equipment, travel and competitions."
+
+msgid "Quiero patrocinar al club"
+msgstr "I want to sponsor the club"
+
+msgid "Colabora con nosotros"
+msgstr "Partner with us"
+
+msgid "Cuéntanos cómo quieres apoyar al club"
+msgstr "Tell us how you would like to support the club"
+
+msgid "Rellena el formulario y nos pondremos en contacto contigo para explicarte las opciones de patrocinio y colaboración."
+msgstr "Fill in the form and we will get back to you to explain the sponsorship and collaboration options."

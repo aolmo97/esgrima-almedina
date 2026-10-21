@@ -175,7 +175,7 @@ $contacto_id = seac_get_page_id_by_template( 'page-contactanos.php' );
 
 				<?php if ( $contacto_id ) : ?>
 					<div class="equipo-cta">
-						<div class="equipo-cta__icon"><span class="material-symbols-outlined" aria-hidden="true">sports_martial_arts</span></div>
+						<div class="equipo-cta__icon"><span class="material-symbols-outlined" aria-hidden="true">swords</span></div>
 						<div>
 							<h3 class="equipo-cta__title"><?php esc_html_e( '¿Quieres entrenar con nuestro equipo?', 'seac' ); ?></h3>
 							<p class="equipo-cta__desc"><?php esc_html_e( 'Sin compromiso. Te proporcionamos la careta, el traje y la espada para tu primer asalto.', 'seac' ); ?></p>

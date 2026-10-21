@@ -126,6 +126,15 @@ function seac_arma_label( $arma ) {
     return isset( $labels[ $arma ] ) ? $labels[ $arma ] : ucfirst( $arma );
 }
 
+/**
+ * Etiquetas de arma para un valor o una lista de valores (el campo ACF "arma"
+ * admite varias armas; antiguamente guardaba un solo texto). Devuelve un array.
+ */
+function seac_arma_labels( $armas ) {
+    $armas = array_filter( (array) $armas );
+    return array_values( array_map( 'seac_arma_label', $armas ) );
+}
+
 function seac_mano_label( $mano ) {
     $labels = array(
         'diestro' => __( 'Diestro', 'seac' ),
@@ -248,9 +257,13 @@ function seac_fallback_menu() {
     $contacto_id = seac_get_page_id_by_template( 'page-contactanos.php' );
     $quienes_id  = seac_get_page_id_by_template( 'page-quienes-somos.php' );
     echo '<ul class="primary-menu">';
-    echo '<li><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Home', 'seac' ) . '</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/' ) ) . '">' . esc_html__( 'Inicio', 'seac' ) . '</a></li>';
     if ( $quienes_id ) {
         echo '<li><a href="' . esc_url( get_permalink( $quienes_id ) ) . '">' . esc_html__( 'Quiénes somos', 'seac' ) . '</a></li>';
+    }
+    $colab_id = seac_get_page_id_by_template( 'page-colaboradores.php' );
+    if ( $colab_id ) {
+        echo '<li><a href="' . esc_url( get_permalink( $colab_id ) ) . '">' . esc_html__( 'Colaboradores', 'seac' ) . '</a></li>';
     }
     if ( $contacto_id ) {
         echo '<li><a href="' . esc_url( get_permalink( $contacto_id ) ) . '">' . esc_html__( 'Contáctanos', 'seac' ) . '</a></li>';
@@ -347,6 +360,17 @@ function seac_contact_form_title() {
         return 'Contacto SEAC EN';
     }
     return 'Contacto SEAC';
+}
+
+/**
+ * Título del formulario CF7 de patrocinio/colaboración según idioma.
+ * Su destinatario es el propio del formulario (no pasa por seac_cf7_dynamic_recipient).
+ */
+function seac_sponsor_form_title() {
+    if ( function_exists( 'pll_current_language' ) && 'en' === pll_current_language() ) {
+        return 'Patrocinio SEAC EN';
+    }
+    return 'Patrocinio SEAC';
 }
 
 // Custom Post Type: Miembro del equipo

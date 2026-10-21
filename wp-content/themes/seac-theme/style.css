@@ -3,7 +3,7 @@
 Theme Name: SEAC Theme
 Description: Tema personalizado para la Sala de Esgrima Almedina Córdoba (S.E.A.C.)
 Author: Antonio
-Version: 0.5
+Version: 0.6
 Text Domain: seac
 Domain Path: /languages
 */
@@ -2025,3 +2025,20 @@ img { max-width: 100%; height: auto; display: block; }
 
   .grid-contacto { grid-template-columns: 1fr 1fr; }
 }
+
+
+/* ===== Colaboradores ===== */
+.colab-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.colab-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  padding: 24px; min-height: 160px; text-align: center;
+  background: var(--color-surface-container-lowest); border: 1px solid var(--color-border);
+  border-radius: 12px; color: inherit; text-decoration: none; transition: box-shadow .2s, border-color .2s;
+}
+a.colab-card:hover { box-shadow: var(--shadow-md); border-color: var(--color-tint-border); }
+.colab-card__logo { max-width: 100%; max-height: 90px; width: auto; height: auto; object-fit: contain; }
+.colab-card__name { font-weight: 600; }
+.colab-mecenas { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.colab-mecenas li { padding: 8px 16px; border: 1px solid var(--color-border); border-radius: 999px; background: var(--color-surface-container-lowest); font-weight: 500; }
+@media (min-width: 768px) { .colab-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1024px) { .colab-grid { grid-template-columns: repeat(4, 1fr); } }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Partial: tarjeta de un post del CPT "miembro_equipo".
- * Campos ACF del CPT: nacionalidad [text], arma [select: espada|florete|sable],
+ * Campos ACF del CPT: nacionalidad [text], arma [checkbox múltiple: espada|florete|sable],
  * mano [select: diestro|zurdo], biografia [textarea], destacado [true_false].
  *
  * Se invoca con get_template_part( 'template-parts/card-miembro-equipo', null, $args )
@@ -24,7 +24,8 @@ $mano         = get_field( 'mano', $member_id );
 $biografia    = seac_member_bio( $member_id );
 
 $nacionalidad_label = $nacionalidad ? seac_nacionalidad_label( $nacionalidad ) : '';
-$arma_label         = $arma ? seac_arma_label( $arma ) : '';
+$arma_labels        = seac_arma_labels( $arma );
+$arma_label         = implode( ' / ', $arma_labels );
 $mano_label         = $mano ? seac_mano_label( $mano ) : '';
 ?>
 
@@ -46,9 +47,9 @@ $mano_label         = $mano ? seac_mano_label( $mano ) : '';
 
 		<div class="equipo-destacado__info">
 			<div class="equipo-destacado__chips">
-				<?php if ( $arma_label ) : ?>
-					<span class="chip"><?php echo esc_html( $arma_label ); ?></span>
-				<?php endif; ?>
+				<?php foreach ( $arma_labels as $arma_item ) : ?>
+					<span class="chip"><?php echo esc_html( $arma_item ); ?></span>
+				<?php endforeach; ?>
 				<?php if ( $mano_label ) : ?>
 					<span class="chip"><?php echo esc_html( $mano_label ); ?></span>
 				<?php endif; ?>
@@ -81,7 +82,7 @@ $mano_label         = $mano ? seac_mano_label( $mano ) : '';
 		<h3 class="card-miembro__nombre"><?php echo esc_html( get_the_title( $member_id ) ); ?></h3>
 
 		<?php if ( $nacionalidad_label || $arma_label ) : ?>
-			<p class="card-miembro__nacionalidad"><?php echo esc_html( trim( $nacionalidad_label . ( $nacionalidad_label && $arma_label ? ' · ' : '' ) . ( $arma_label ? sprintf( __( 'Arma: %s', 'seac' ), $arma_label ) : '' ) ) ); ?></p>
+			<p class="card-miembro__nacionalidad"><?php echo esc_html( trim( $nacionalidad_label . ( $nacionalidad_label && $arma_label ? ' · ' : '' ) . ( $arma_label ? sprintf( _n( 'Arma: %s', 'Armas: %s', count( $arma_labels ), 'seac' ), $arma_label ) : '' ) ) ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( $mano_label ) : ?>
