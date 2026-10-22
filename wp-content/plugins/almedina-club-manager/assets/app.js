@@ -22,7 +22,7 @@
   }
 
   function shell() {
-    root.innerHTML = '<div class="layout"><aside class="sidebar" id="sidebar"><div class="brand">⚔ Almedina<small>Club Manager</small></div><nav id="nav">' +
+    root.innerHTML = '<div class="layout"><aside class="sidebar" id="sidebar">' + A.S.brandHtml(A.cfg.brand, 'side') + '<div class="brandsub">Club Manager</div><nav id="nav">' +
       NAV.map(function (n) { return '<a href="#/' + n[0] + '" data-nav="' + n[0] + '"><span class="ico" aria-hidden="true">' + n[2] + '</span>' + esc(n[1]) + '</a>'; }).join('') +
       '</nav><div class="side-foot"><div class="muted small">' + esc(A.cfg.user) + '</div><a class="btn" href="' + esc(A.cfg.logout) + '">Cerrar sesión</a></div></aside>' +
       '<div class="mainwrap"><header class="topbar"><button class="btn" id="burger" aria-label="Menú" aria-expanded="false">☰</button><strong id="toptitle">Almedina</strong></header><main class="content panel" id="content"></main></div></div>' +
@@ -38,7 +38,7 @@
     var r = parse();
     if (current && A.views[current].leave) A.views[current].leave();
     current = r.name;
-    A.$$('#nav a').forEach(function (a) { a.classList.toggle('active', a.dataset.nav === r.name); });
+    A.$$('#nav a').forEach(function (a) { a.classList.toggle('active', a.dataset.nav === (r.name === 'imprimir' ? 'torneos' : r.name)); });
     A.$('#toptitle').textContent = A.views[r.name].title;
     document.title = A.views[r.name].title + ' · Almedina Gestión';
     A.$('#modalhost').innerHTML = '';

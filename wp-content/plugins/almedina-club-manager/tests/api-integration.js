@@ -25,6 +25,19 @@
     ok('sin sesión PUT /bouts/1 -> 401', (await call('PUT', '/bouts/1', {}, false)).s === 401);
     ok('con cookie y sin nonce POST /tournaments -> 401', (await fetch(cfg.root + '/tournaments', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}' })).status === 401);
 
+    /* ---- Indexación y acceso por sesión de WordPress ---- */
+    const gp = await fetch('/gestion/', { credentials: 'same-origin' });
+    const gh = await gp.text();
+    ok('/gestion/ con sesión: noindex en cabecera y en meta', /noindex/.test(gp.headers.get('x-robots-tag') || '') && /<meta name="robots" content="noindex,nofollow">/.test(gh));
+    ok('/gestion/ no se cachea (no-store o no-cache)', /no-store|no-cache/.test(gp.headers.get('cache-control') || ''));
+    const gu = await fetch('/gestion/', { credentials: 'omit', redirect: 'manual' });
+    ok('/gestion/ sin sesión no devuelve el panel (redirección al login u opaco)', gu.type === 'opaqueredirect' || gu.status === 302 || gu.status === 401 || gu.status === 403);
+    const robots = await (await fetch('/robots.txt', { credentials: 'omit' })).text();
+    ok('robots.txt prohíbe /gestion/ y la API del plugin', /Disallow: \/gestion\//.test(robots) && /Disallow: \/wp-json\/almedina\//.test(robots));
+    const sm = await fetch('/wp-sitemap.xml', { credentials: 'omit' });
+    const smt = sm.ok ? await sm.text() : '';
+    ok('el sitemap de WordPress no menciona /gestion/ ni /resultados/', !/gestion|resultados/.test(smt));
+
     /* ---- Tiradores ---- */
     const base = { first_name: 'ZZTEST', last_name: 'Uno', club: 'Club A', license: 'L-1', birth_year: 1990, nationality: 'ES', weapons: ['espada'], notes: 'nota privada' };
     for (const [n, b] of [['sin apellidos', { ...base, last_name: '' }], ['arma inválida', { ...base, weapons: ['laser'] }], ['armas no array', { ...base, weapons: 'espada' }], ['año 1800', { ...base, birth_year: 1800 }], ['año texto', { ...base, birth_year: '1990' }], ['nombre >100', { ...base, first_name: 'x'.repeat(101) }], ['nombre como array', { ...base, first_name: ['a'] }]]) {

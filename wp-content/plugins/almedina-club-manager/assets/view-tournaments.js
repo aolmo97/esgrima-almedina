@@ -78,6 +78,11 @@
       '<div class="btnrow no-print"><button class="btn" id="editt">Editar</button><button class="btn danger" id="delt">Eliminar</button></div></div>' +
       '<div class="card"><label class="field">Enlace público de resultados (solo lectura, para otros dispositivos)<span class="copyrow"><input id="pubUrl" readonly value="' + esc(url) + '"><button class="btn" id="copyUrl" type="button">Copiar</button><a class="btn" href="' + esc(url) + '" target="_blank" rel="noopener">Abrir</a></span></label></div>';
 
+    html += '<div class="card no-print"><h2>Imprimir / PDF</h2><p class="muted small">Abre un documento A4 con el logo del club; en el diálogo de impresión elige «Guardar como PDF». Las hojas «a mano» sirven para llevar el torneo en papel.</p><div class="btnrow">' +
+      '<a class="btn" href="#/imprimir/' + t.id + '/lista">Lista de inscritos</a>' +
+      '<a class="btn" href="#/imprimir/' + t.id + '/poules">Hojas de poule (a mano)</a>' +
+      '<a class="btn" href="#/imprimir/' + t.id + '/cuadro">Cuadro (a mano)</a>' +
+      '<a class="btn primary" href="#/imprimir/' + t.id + '/resultados">Resultados</a></div></div>';
     if (t.status === 'setup') html += setupSection();
     if (groups.length) {
       html += '<section class="card"><h2>Poules</h2>' + groups.map(function (g) { return pouleSection(g, n, t.status === 'poules'); }).join('') + '</section>';

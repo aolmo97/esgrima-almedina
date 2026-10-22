@@ -80,7 +80,8 @@
   S.roundName = function (r) { return ROUND_NAMES[r] || ('Tabla de ' + r); };
 
   // Cuadro de eliminación. `extra(bout)` devuelve HTML adicional (controles) para cada asalto.
-  S.bracketHtml = function (deBouts, nameOf, extra) {
+  S.bracketHtml = function (deBouts, nameOf, extra, opts) {
+    opts = opts || {};
     if (!deBouts.length) return '<p class="empty">El cuadro aún no se ha generado.</p>';
     var rounds = Array.from(new Set(deBouts.map(function (b) { return b.round; }))).sort(function (x, y) { return y - x; });
     var first = rounds[0];
@@ -89,9 +90,10 @@
         deBouts.filter(function (b) { return b.round === r; }).sort(function (x, y) { return x.slot - y.slot; }).map(function (b) {
           var bye = r === first && (b.fencer_a == null || b.fencer_b == null);
           var side = function (id, score, isWinner) {
+            if (opts.blank) return '<div class="side"><span>' + S.esc(id == null ? (bye ? 'Descansa' : '') : nameOf(id)) + '</span><b class="box"></b></div>';
             return '<div class="side ' + (isWinner ? 'winner' : '') + '"><span>' + S.esc(id == null ? (bye ? 'Descansa' : 'Por determinar') : nameOf(id)) + '</span><b>' + (score == null ? '' : score) + '</b></div>';
           };
-          var done = b.status === 'done';
+          var done = !opts.blank && b.status === 'done';
           return '<div class="bout ' + b.status + (bye ? ' bye' : '') + '">' + side(b.fencer_a, b.score_a, done && b.winner === b.fencer_a) + side(b.fencer_b, b.score_b, done && b.winner === b.fencer_b) + (extra && !bye ? extra(b) : '') + '</div>';
         }).join('') + '</div></div>';
     }).join('') + '</div>';
@@ -101,6 +103,13 @@
     if (!placings.length) return '';
     return '<div class="tablewrap"><table class="grid"><thead><tr><th>Puesto</th><th>Tirador</th></tr></thead><tbody>' +
       placings.map(function (p) { return '<tr><td>' + p.place + '</td><td>' + S.esc(nameOf(p.id)) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+  };
+
+  // Cabecera de marca (logo + nombre + eslogan) para el panel, la página pública y los documentos impresos.
+  S.brandHtml = function (brand, cls) {
+    brand = brand || {};
+    return '<div class="brandhead ' + (cls || '') + '">' + (brand.logo ? '<img class="brandlogo" src="' + S.esc(brand.logo) + '" alt="">' : '') +
+      '<div><div class="brandname">' + S.esc(brand.name || 'Club de Esgrima') + '</div><div class="brandtag">' + S.esc(brand.tagline || '') + '</div></div></div>';
   };
 
   return S;

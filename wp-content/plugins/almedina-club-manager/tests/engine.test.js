@@ -261,3 +261,26 @@ test('shared.pouleMatrixHtml muestra V/D con tocados', () => {
   assert.ok(html.includes('V5'));
   assert.ok(html.includes('D3'));
 });
+
+test('shared.bracketHtml en modo blanco: casillas vacías, sin marcadores ni ganadores', () => {
+  const de = [{ round: 2, slot: 1, fencer_a: 1, fencer_b: 2, score_a: 15, score_b: 3, winner: 1, status: 'done' }];
+  const html = S.bracketHtml(de, id => 'T' + id, null, { blank: true });
+  assert.ok(html.includes('class="box"'));
+  assert.ok(!html.includes('winner'));
+  assert.ok(!html.includes('>15<'));
+  assert.ok(html.includes('T1') && html.includes('T2'));
+});
+
+test('shared.brandHtml escapa el nombre y omite el logo si no hay', () => {
+  const h = S.brandHtml({ name: '<b>Club</b>', tagline: 'x', logo: '' }, 'side');
+  assert.ok(!h.includes('<b>Club'));
+  assert.ok(!h.includes('<img'));
+  assert.ok(S.brandHtml({ name: 'A', logo: 'https://e.com/l.png' }).includes('<img'));
+});
+
+test('cuadro en blanco con marcadores de posición (n = 6) incluye byes y 7 asaltos', () => {
+  const ids = [-1, -2, -3, -4, -5, -6];
+  const b = E.generateBracket(ids);
+  assert.equal(b.length, 7);
+  assert.equal(b.find(x => x.round === 4 && x.slot === 1).a, -1, 'el nº 1 ya pasa a cuartos');
+});
