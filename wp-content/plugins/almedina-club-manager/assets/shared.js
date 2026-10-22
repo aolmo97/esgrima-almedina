@@ -85,7 +85,7 @@
     var rounds = Array.from(new Set(deBouts.map(function (b) { return b.round; }))).sort(function (x, y) { return y - x; });
     var first = rounds[0];
     return '<div class="bracket">' + rounds.map(function (r) {
-      return '<div class="bracket-col"><h4>' + S.roundName(r) + '</h4>' +
+      return '<div class="bracket-col"><h4>' + S.roundName(r) + '</h4><div class="bracket-bouts">' +
         deBouts.filter(function (b) { return b.round === r; }).sort(function (x, y) { return x.slot - y.slot; }).map(function (b) {
           var bye = r === first && (b.fencer_a == null || b.fencer_b == null);
           var side = function (id, score, isWinner) {
@@ -93,7 +93,7 @@
           };
           var done = b.status === 'done';
           return '<div class="bout ' + b.status + (bye ? ' bye' : '') + '">' + side(b.fencer_a, b.score_a, done && b.winner === b.fencer_a) + side(b.fencer_b, b.score_b, done && b.winner === b.fencer_b) + (extra && !bye ? extra(b) : '') + '</div>';
-        }).join('') + '</div>';
+        }).join('') + '</div></div>';
     }).join('') + '</div>';
   };
 

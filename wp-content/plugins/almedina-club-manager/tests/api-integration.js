@@ -219,7 +219,7 @@
     r = await call('PUT', '/events/' + ev.j.id, { title: 'ZZTEST Evento editado', start_date: '2026-12-12', end_date: '2026-12-13', organizer: 'FADE', weapon: 'sable', status: 'confirmado' });
     ok('calendario: editar evento -> 200', r.s === 200);
     r = await call('GET', '/events');
-    ok('calendario: evento editado persistido', r.j.some(e => e.id === ev.j.id && e.organizer === 'FADE' && e.end_date === '2026-12-13'));
+    ok('calendario: evento editado persistido', r.j.some(e => String(e.id) === String(ev.j.id) && e.organizer === 'FADE' && e.end_date === '2026-12-13'));
     ok('calendario: fechas inválidas -> 400', (await call('POST', '/events', { title: 'x', start_date: '2026-12-12', end_date: '2026-12-01' })).s === 400);
 
     /* ---- Borrado en cascada ---- */
