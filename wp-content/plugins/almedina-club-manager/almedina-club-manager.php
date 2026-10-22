@@ -15,7 +15,7 @@ final class Almedina_Club_Manager {
   add_action('template_redirect',[__CLASS__,'render']);
   add_action('rest_api_init',[__CLASS__,'api']);
   add_action('admin_menu',[__CLASS__,'menu']);
-  add_action('plugins_loaded',[__CLASS__,'maybe_upgrade']);
+  add_action('init',[__CLASS__,'maybe_upgrade'],20);
   add_filter('rest_post_dispatch',[__CLASS__,'no_store'],10,3);
  }
  static function table(){global $wpdb;return $wpdb->prefix.'almedina_events';}
