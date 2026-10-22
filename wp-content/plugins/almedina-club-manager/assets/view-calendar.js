@@ -12,7 +12,7 @@
   var api = function (path, method, body) { return A.request(path ? '/events' + path : '/events', method, body); };
 
   function template() {
-    return '<div class="heading"><div><h1>Calendario de competiciones</h1><p class="muted">Temporada 2026–2027 · Eventos guardados en WordPress</p></div><button class="btn primary" id="add">+ Nueva competición</button></div>' +
+    return '<div class="heading"><div><h1>Calendario de competiciones</h1><p class="muted">Temporada 2026–2027 · Eventos guardados en WordPress</p></div><button class="btn primary no-print" id="add">+ Nueva competición</button></div>' +
       '<div class="toolbar"><select id="org"><option value="TODAS">Todas las entidades</option>' +
       ['FAE', 'FADE', 'RFEE', 'OTRA'].map(function (x) { return '<option ' + (x === org ? 'selected' : '') + '>' + x + '</option>'; }).join('') +
       '</select><select id="view"><option value="list" ' + (view === 'list' ? 'selected' : '') + '>Vista listado</option><option value="month" ' + (view === 'month' ? 'selected' : '') + '>Vista mensual</option></select><span id="monthcontrols"></span><button class="btn" id="print">🖨 Imprimir / PDF</button></div>' +
