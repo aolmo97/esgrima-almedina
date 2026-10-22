@@ -50,8 +50,9 @@ Disallow: /wp-json/almedina/
    }
   }catch(Throwable $e){}
   // Siglas del club (para el menú del panel): las del eslogan (p. ej. «S.E.A.C.») o, si no hay, las iniciales del nombre.
-  if(preg_match('/(?<![A-ZÁÉÍÓÚa-z])[A-ZÁÉÍÓÚ](?:\.[A-ZÁÉÍÓÚ])+\.?/u',$b['tagline'],$m)){$b['short']=$m[0];}
-  else{$ini='';foreach(preg_split('/\s+/u',$b['name']) as $w){if(mb_strlen($w)>2)$ini.=mb_strtoupper(mb_substr($w,0,1)).'.';}$b['short']=$ini?:$b['name'];}
+  if(preg_match('/(?<![A-ZÁÉÍÓÚa-z])[A-ZÁÉÍÓÚ](?:\.[A-ZÁÉÍÓÚ])+\.?/u',$b['tagline'],$m)){$b['short']=$m[0];$b['short_raw']=$m[0];}
+  elseif(preg_match('/(?<![A-Za-zÁÉÍÓÚ])[A-ZÁÉÍÓÚ]{3,6}(?![A-Za-zÁÉÍÓÚ])/u',$b['tagline'],$m)){$b['short']=implode('.',preg_split('//u',$m[0],-1,PREG_SPLIT_NO_EMPTY)).'.';$b['short_raw']=$m[0];}
+  else{$ini='';foreach(preg_split('/\s+/u',$b['name']) as $w){if(mb_strlen($w)>2)$ini.=mb_strtoupper(mb_substr($w,0,1)).'.';}$b['short']=$ini?:$b['name'];$b['short_raw']='';}
   return $b;
  }
  static function brand_css($b){

@@ -24,7 +24,7 @@
   // En el menú lateral se muestran las siglas del club en lugar del nombre completo.
   function sideBrand() {
     var b = A.cfg.brand || {}, short = b.short || b.name || '';
-    var tag = String(b.tagline || '').replace(short, '').replace(/^[\s·]+|[\s·]+$/g, '');
+    var tag = String(b.tagline || '').replace(b.short_raw || short, '').replace(/^[\s·]+|[\s·]+$/g, '');
     return { logo: b.logo, name: short, tagline: tag };
   }
 
