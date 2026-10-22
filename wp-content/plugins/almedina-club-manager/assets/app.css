@@ -86,5 +86,5 @@ body.public{border-top:6px solid var(--brand)}
 .pdoc-table td.w{height:36px;min-width:34px}.pdoc-table td.wide{min-width:180px}.pdoc-table thead th{background:var(--brand-tint)}
 .pdoc-table .diag{background:repeating-linear-gradient(45deg,#cbd5e1,#cbd5e1 3px,#f1f5f9 3px,#f1f5f9 7px)}
 .pdoc .bout .side b.box{display:inline-block;min-width:36px;height:22px;border:1px solid #64748b;border-radius:3px}.pdoc .bout .side{padding:9px 2px}.pdoc .bout{border-color:#94a3b8}
-.pdoc h2{margin:16px 0 8px}
+.pdoc .bout .side span{flex:1;min-height:1.3em;border-bottom:1px solid #cbd5e1}.pdoc h2{margin:16px 0 8px}
 @media print{.pdoc{border:0;border-radius:0;padding:0}.pdoc-page{break-after:page;margin:0}.pdoc-page:last-child{break-after:auto}.printbar{display:none!important}.brandhead.side{display:none}body.public{border-top:0}}

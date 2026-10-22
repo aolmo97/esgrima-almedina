@@ -1,4 +1,4 @@
-# Almedina Club Manager v0.2.0 — documentación de desarrollo
+# Almedina Club Manager v0.2 / v0.3 — documentación de desarrollo
 
 Entorno desplegado: Coolify (`…sslip.io/gestion/`). **No** está en esgrimacordoba.es.
 
@@ -60,3 +60,11 @@ Inspirado en las capacidades públicas de fencer.app (poules, DE, marcador con t
 ## 6. Despliegue
 
 `git push origin main` → en Coolify, aplicación "Esgrima almedina" → **Redeploy**. En el primer arranque con la nueva versión, `maybe_upgrade` ejecuta dbDelta y refresca las reglas de reescritura. Las variables `SERVICE_PASSWORD_64_*` (claves de WordPress) las genera Coolify: no las borres o se cerrarán las sesiones.
+
+## 7. Novedades v0.3.0
+
+- **Marca del club**: el panel, la página pública y los documentos impresos usan el logo, el nombre, el eslogan y el color principal de «Ajustes del sitio» de la web (campos ACF `logo_sitio`, `nombre_marca`, `eslogan_marca`, `color_primario`), con valores por defecto si no existen. Menú lateral oscuro (pizarra de la web) con acento verde corporativo. Sin fuentes externas.
+- **Imprimir / PDF** en cada torneo (`#/imprimir/{id}/{tipo}`), A4 con logo: lista de inscritos, **hojas de poule en blanco** (matriz, orden de asaltos, pista/árbitro/hora) y **cuadro en blanco** (apaisado; con la clasificación real si las poules han terminado o con «Clasificado nº k» si no) para llevar el torneo **a mano**, y resultados con datos. PDF = diálogo de impresión del navegador → «Guardar como PDF» (no se genera un PDF en servidor).
+- **Indexación y acceso**: `/gestion/` exige sesión de WordPress (sin sesión redirige al login) y la capacidad `manage_almedina_calendar`; responde con `X-Robots-Tag: noindex, nofollow`, `<meta robots noindex>` y `Cache-Control: no-store`. `robots.txt` (virtual de WordPress) añade `Disallow: /gestion/` y `Disallow: /wp-json/almedina/`. La página pública `/resultados/{token}/` también es `noindex` y no aparece en el sitemap. Comprobado con pruebas automáticas (112 en total).
+- **Aviso**: si el servidor tiene un `robots.txt` físico, WordPress no lo genera y la regla no se añade; la cabecera y la meta `noindex` siguen protegiendo. No se ha comprobado el `robots.txt` de producción (el plugin no está instalado allí).
+- **Pruebas**: 29 en Node (motor y vistas) y 112 de API/integración. No ejecutado: diálogo de impresión real y PDF generado en un navegador concreto (se revisó la maquetación en pantalla y las reglas `@media print`).
