@@ -21,8 +21,15 @@
     return { name: name, params: parts.slice(1) };
   }
 
+  // En el menú lateral se muestran las siglas del club en lugar del nombre completo.
+  function sideBrand() {
+    var b = A.cfg.brand || {}, short = b.short || b.name || '';
+    var tag = String(b.tagline || '').replace(short, '').replace(/^[\s·]+|[\s·]+$/g, '');
+    return { logo: b.logo, name: short, tagline: tag };
+  }
+
   function shell() {
-    root.innerHTML = '<div class="layout"><aside class="sidebar" id="sidebar">' + A.S.brandHtml(A.cfg.brand, 'side') + '<div class="brandsub">Club Manager</div><nav id="nav">' +
+    root.innerHTML = '<div class="layout"><aside class="sidebar" id="sidebar">' + A.S.brandHtml(sideBrand(), 'side') + '<div class="brandsub">Club Manager</div><nav id="nav">' +
       NAV.map(function (n) { return '<a href="#/' + n[0] + '" data-nav="' + n[0] + '"><span class="ico" aria-hidden="true">' + n[2] + '</span>' + esc(n[1]) + '</a>'; }).join('') +
       '</nav><div class="side-foot"><div class="muted small">' + esc(A.cfg.user) + '</div><a class="btn" href="' + esc(A.cfg.logout) + '">Cerrar sesión</a></div></aside>' +
       '<div class="mainwrap"><header class="topbar"><button class="btn" id="burger" aria-label="Menú" aria-expanded="false">☰</button><strong id="toptitle">Almedina</strong></header><main class="content panel" id="content"></main></div></div>' +

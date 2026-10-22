@@ -2,13 +2,13 @@
 /**
  * Plugin Name: Almedina Club Manager
  * Description: Backoffice privado del Club de Esgrima Almedina: calendario, tiradores, torneos (poules y eliminación directa), marcador y resultados.
- * Version: 0.3.0
+ * Version: 0.3.1
  * Requires PHP: 7.4
  * Text Domain: almedina-club-manager
  */
 if (!defined('ABSPATH')) exit;
 final class Almedina_Club_Manager {
- const VERSION='0.3.0'; const DB_VERSION='2'; const DB_OPTION='almedina_club_manager_db_version'; const CAP='manage_almedina_calendar'; const ROUTE='gestion';
+ const VERSION='0.3.1'; const DB_VERSION='2'; const DB_OPTION='almedina_club_manager_db_version'; const CAP='manage_almedina_calendar'; const ROUTE='gestion';
  static $load_error=null;
  static function load_modules(){
   try{
@@ -49,6 +49,9 @@ Disallow: /wp-json/almedina/
     $id=get_field('logo_sitio','option');if($id){$u=wp_get_attachment_image_url((int)$id,'medium');if($u)$b['logo']=esc_url_raw($u);}
    }
   }catch(Throwable $e){}
+  // Siglas del club (para el menú del panel): las del eslogan (p. ej. «S.E.A.C.») o, si no hay, las iniciales del nombre.
+  if(preg_match('/(?<![A-ZÁÉÍÓÚa-z])[A-ZÁÉÍÓÚ](?:\.[A-ZÁÉÍÓÚ])+\.?/u',$b['tagline'],$m)){$b['short']=$m[0];}
+  else{$ini='';foreach(preg_split('/\s+/u',$b['name']) as $w){if(mb_strlen($w)>2)$ini.=mb_strtoupper(mb_substr($w,0,1)).'.';}$b['short']=$ini?:$b['name'];}
   return $b;
  }
  static function brand_css($b){
