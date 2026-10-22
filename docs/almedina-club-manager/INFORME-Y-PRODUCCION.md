@@ -1,6 +1,6 @@
 # Almedina Club Manager v0.1.1 — informe de pruebas e instalación en producción
 
-Paquete: `almedina-club-manager-v0.1.1.zip` (en esta misma carpeta). Código fuente: `wp-content/plugins/almedina-club-manager/`.
+Paquete: `almedina-club-manager-v0.3.1.zip` (en esta misma carpeta). Código fuente: `wp-content/plugins/almedina-club-manager/`.
 
 ## 1. Entorno de pruebas (Coolify)
 
@@ -58,7 +58,7 @@ Antes:
 2. Comprueba que puedes descargarla/restaurarla. Una copia que no se puede restaurar no vale.
 
 Instalar:
-1. wp-admin de esgrimacordoba.es → Plugins → Añadir plugin → Subir plugin → `almedina-club-manager-v0.1.1.zip` → Instalar → **Activar**.
+1. wp-admin de esgrimacordoba.es → Plugins → Añadir plugin → Subir plugin → `almedina-club-manager-v0.3.1.zip` → Instalar → **Activar**.
 2. Ajustes → Enlaces permanentes → **Guardar cambios** (refresca las reglas; solo si `/gestion/` da 404).
 3. Abre `https://esgrimacordoba.es/gestion/` con tu cuenta administradora.
 4. Si usas LiteSpeed Cache (o la caché de Hostinger): excluye de caché `/gestion/` y `/wp-json/almedina/v1/`. El plugin ya envía `no-store`, pero conviene excluirlas de forma explícita. Purga la caché tras activar.
