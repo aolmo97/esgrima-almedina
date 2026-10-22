@@ -220,3 +220,44 @@ test('torneo completo de 8: de las poules al campeón', () => {
 test('bracketPlacings: sin asaltos terminados no hay clasificación', () => {
   assert.deepEqual(E.bracketPlacings(E.generateBracket([1, 2, 3, 4])), []);
 });
+
+// ---- Helpers de presentación (shared.js) ----
+const S = require('../assets/shared.js');
+
+test('shared.esc escapa HTML', () => {
+  assert.equal(S.esc('<b>"a" & \'b\'</b>'), '&lt;b&gt;&quot;a&quot; &amp; &#39;b&#39;&lt;/b&gt;');
+  assert.equal(S.esc(null), '');
+});
+
+test('shared.pouleGroups agrupa asaltos por poule', () => {
+  const bouts = [
+    { id: 1, phase: 'poule', poule_no: 1, fencer_a: 1, fencer_b: 2, status: 'pending' },
+    { id: 2, phase: 'poule', poule_no: 2, fencer_a: 3, fencer_b: 4, status: 'pending' },
+    { id: 3, phase: 'poule', poule_no: 1, fencer_a: 1, fencer_b: 5, status: 'pending' },
+    { id: 4, phase: 'de', round: 4, slot: 1, fencer_a: 1, fencer_b: 3, status: 'pending' }
+  ];
+  const g = S.pouleGroups(bouts);
+  assert.equal(g.length, 2);
+  assert.deepEqual(g[0].fencers, [1, 2, 5]);
+  assert.equal(g[0].bouts.length, 2);
+  assert.deepEqual(g[1].fencers, [3, 4]);
+});
+
+test('shared.rankingHtml y bracketHtml escapan nombres', () => {
+  const nameOf = id => '<img src=x onerror=alert(1)>' + id;
+  const html = S.rankingHtml([{ id: 1, place: 1, tied: false, v: 1, m: 1, vm: 1, td: 5, tr: 2, ind: 3 }], nameOf);
+  assert.ok(!html.includes('<img'));
+  assert.ok(html.includes('&lt;img'));
+  const de = [{ round: 2, slot: 1, fencer_a: 1, fencer_b: 2, status: 'pending' }];
+  const b = S.bracketHtml(de, nameOf);
+  assert.ok(!b.includes('<img'));
+  assert.ok(b.includes('Final'));
+});
+
+test('shared.pouleMatrixHtml muestra V/D con tocados', () => {
+  const E2 = require('../assets/engine.js');
+  const g = { no: 1, fencers: [1, 2], bouts: [{ a: 1, b: 2, score_a: 5, score_b: 3, winner: 1, status: 'done' }] };
+  const html = S.pouleMatrixHtml(g, id => 'T' + id, E2);
+  assert.ok(html.includes('V5'));
+  assert.ok(html.includes('D3'));
+});

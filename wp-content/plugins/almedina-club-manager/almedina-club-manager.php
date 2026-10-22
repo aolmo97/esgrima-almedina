@@ -1,17 +1,30 @@
 <?php
 /**
  * Plugin Name: Almedina Club Manager
- * Description: Backoffice privado de competiciones del Club de Esgrima Almedina.
- * Version: 0.1.1
+ * Description: Backoffice privado del Club de Esgrima Almedina: calendario, tiradores, torneos (poules y eliminación directa), marcador y resultados.
+ * Version: 0.2.0
  * Requires PHP: 7.4
  * Text Domain: almedina-club-manager
  */
 if (!defined('ABSPATH')) exit;
 final class Almedina_Club_Manager {
- const VERSION='0.1.1'; const DB_OPTION='almedina_club_manager_db_version'; const CAP='manage_almedina_calendar'; const ROUTE='gestion';
+ const VERSION='0.2.0'; const DB_VERSION='2'; const DB_OPTION='almedina_club_manager_db_version'; const CAP='manage_almedina_calendar'; const ROUTE='gestion';
+ static $load_error=null;
+ static function load_modules(){
+  try{
+   require_once __DIR__.'/includes/class-schema.php';
+   require_once __DIR__.'/includes/class-rest.php';
+   Almedina_Rest::init();
+  }catch(Throwable $e){
+   self::$load_error=$e->getMessage();
+   add_action('admin_notices',function(){echo '<div class="notice notice-error"><p>Almedina Club Manager: no se pudieron cargar los módulos nuevos ('.esc_html(Almedina_Club_Manager::$load_error).'). El calendario sigue funcionando.</p></div>';});
+  }
+ }
  static function init(){
+  self::load_modules();
   add_action('init',[__CLASS__,'rewrite']);
-  add_filter('query_vars',function($vars){$vars[]='almedina_gestion';return $vars;});
+  add_filter('query_vars',function($vars){$vars[]='almedina_gestion';$vars[]='almedina_results';return $vars;});
+  add_action('template_redirect',[__CLASS__,'render_results'],5);
   add_action('template_redirect',[__CLASS__,'render']);
   add_action('rest_api_init',[__CLASS__,'api']);
   add_action('admin_menu',[__CLASS__,'menu']);
@@ -20,42 +33,33 @@ final class Almedina_Club_Manager {
  }
  static function table(){global $wpdb;return $wpdb->prefix.'almedina_events';}
  static function activate(){
-  global $wpdb;require_once ABSPATH.'wp-admin/includes/upgrade.php';
-  $table=self::table();$charset=$wpdb->get_charset_collate();
-  dbDelta("CREATE TABLE $table (
-   id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-   title varchar(220) NOT NULL,
-   start_date date NOT NULL,
-   end_date date NOT NULL,
-   city varchar(150) NOT NULL DEFAULT '',
-   organizer varchar(12) NOT NULL DEFAULT 'FAE',
-   weapon varchar(20) NOT NULL DEFAULT 'espada',
-   category varchar(80) NOT NULL DEFAULT 'absoluta',
-   format varchar(20) NOT NULL DEFAULT 'individual',
-   status varchar(20) NOT NULL DEFAULT 'provisional',
-   source_url varchar(500) NOT NULL DEFAULT '',
-   notes text NULL,
-   created_at datetime NOT NULL,
-   updated_at datetime NOT NULL,
-   PRIMARY KEY  (id),
-   KEY start_date (start_date)
-  ) $charset;");
+  if(class_exists('Almedina_Schema')){Almedina_Schema::install();}
   $role=get_role('administrator');if($role)$role->add_cap(self::CAP);
   self::rewrite();flush_rewrite_rules();
  }
  static function maybe_upgrade(){if(get_option(self::DB_OPTION)!==self::VERSION){self::activate();update_option(self::DB_OPTION,self::VERSION);}}
  static function no_store($response,$server,$request){if(strpos($request->get_route(),'/almedina/v1/')===0){$response->header('Cache-Control','no-store, private');$response->header('X-Robots-Tag','noindex, nofollow');}return $response;}
  static function deactivate(){flush_rewrite_rules();}
- static function rewrite(){add_rewrite_rule('^gestion/?$','index.php?almedina_gestion=1','top');}
+ static function rewrite(){add_rewrite_rule('^gestion/?$','index.php?almedina_gestion=1','top');add_rewrite_rule('^resultados/([a-f0-9]{32})/?$','index.php?almedina_results=$matches[1]','top');}
  static function menu(){add_management_page('Almedina Club Manager','Almedina Club Manager',self::CAP,'almedina-club-manager',function(){echo '<div class="wrap"><h1>Almedina Club Manager</h1><p>Panel privado: <a href="'.esc_url(home_url('/gestion/')).'">Abrir /gestion</a></p><p>El acceso requiere una cuenta con el permiso <code>'.esc_html(self::CAP).'</code>.</p></div>';});}
  static function render(){
   if(!get_query_var('almedina_gestion'))return;
   if(!is_user_logged_in()){wp_safe_redirect(wp_login_url(home_url('/gestion/')));exit;}
   if(!current_user_can(self::CAP)){status_header(403);nocache_headers();wp_die('No tienes permisos para gestionar el calendario.','Acceso denegado',['response'=>403]);}
   nocache_headers();header('X-Robots-Tag: noindex, nofollow',true);
-  $css=plugins_url('assets/app.css',__FILE__);$js=plugins_url('assets/app.js',__FILE__);
-  $cfg=['api'=>esc_url_raw(rest_url('almedina/v1/events')),'nonce'=>wp_create_nonce('wp_rest'),'logout'=>wp_logout_url(home_url('/')),'user'=>wp_get_current_user()->display_name];
-  ?><!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Almedina · Gestión</title><link rel="stylesheet" href="<?php echo esc_url($css); ?>"></head><body><div id="app"><p>Cargando panel…</p></div><script>window.ALMEDINA_CONFIG=<?php echo wp_json_encode($cfg,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT); ?>;</script><script src="<?php echo esc_url($js); ?>" defer></script></body></html><?php exit;
+  $css=plugins_url('assets/app.css',__FILE__);$base=plugins_url('assets/',__FILE__);
+  $cfg=['api'=>esc_url_raw(rest_url('almedina/v1/events')),'root'=>esc_url_raw(rest_url('almedina/v1')),'nonce'=>wp_create_nonce('wp_rest'),'logout'=>wp_logout_url(home_url('/')),'user'=>wp_get_current_user()->display_name,'version'=>self::VERSION,'results_base'=>esc_url_raw(home_url('/resultados/'))];
+  $scripts=['engine.js','shared.js','core.js','view-calendar.js','view-dashboard.js','view-fencers.js','view-tournaments.js','view-scoreboard.js','view-results.js','view-settings.js','app.js'];
+  ?><!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Almedina · Gestión</title><link rel="stylesheet" href="<?php echo esc_url($css.'?v='.self::VERSION); ?>"></head><body><div id="app"><p>Cargando panel…</p></div><script>window.ALMEDINA_CONFIG=<?php echo wp_json_encode($cfg,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT); ?>;</script><?php foreach($scripts as $f){echo '<script src="'.esc_url($base.$f.'?v='.self::VERSION).'" defer></script>';} ?></body></html><?php exit;
+ }
+ static function render_results(){
+  $token=get_query_var('almedina_results');
+  if(!$token)return;
+  if(!preg_match('/^[a-f0-9]{32}$/',$token)){status_header(404);nocache_headers();wp_die('Enlace no válido.','No encontrado',['response'=>404]);}
+  nocache_headers();header('X-Robots-Tag: noindex, nofollow',true);
+  $base=plugins_url('assets/',__FILE__);
+  $cfg=['root'=>esc_url_raw(rest_url('almedina/v1')),'token'=>$token];
+  ?><!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Resultados · Club de Esgrima Almedina</title><link rel="stylesheet" href="<?php echo esc_url($base.'app.css?v='.self::VERSION); ?>"></head><body class="public"><div id="app"><p>Cargando resultados…</p></div><script>window.ALMEDINA_PUBLIC=<?php echo wp_json_encode($cfg,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT); ?>;</script><script src="<?php echo esc_url($base.'engine.js?v='.self::VERSION); ?>" defer></script><script src="<?php echo esc_url($base.'shared.js?v='.self::VERSION); ?>" defer></script><script src="<?php echo esc_url($base.'public.js?v='.self::VERSION); ?>" defer></script></body></html><?php exit;
  }
  static function api(){register_rest_route('almedina/v1','/events',[
   ['methods'=>'GET','callback'=>[__CLASS__,'list_events'],'permission_callback'=>[__CLASS__,'allowed']],

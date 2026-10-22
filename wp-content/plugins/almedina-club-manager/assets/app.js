@@ -1,10 +1,53 @@
-(()=>{'use strict';const config=window.ALMEDINA_CONFIG,root=document.getElementById('app');let events=[],org='TODAS',view='list',month=new Date().toISOString().slice(0,7),editing=null;const $=(s,p=document)=>p.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const date=s=>new Date(s+'T12:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'});const visible=()=>events.filter(e=>org==='TODAS'||e.organizer===org).sort((a,b)=>a.start_date.localeCompare(b.start_date));const template=()=>`<div class="shell"><header class="top"><div><div class="brand">⚔ Almedina Club Manager</div><div class="muted">Gestión privada · ${esc(config.user)}</div></div><a class="btn" href="${esc(config.logout)}">Cerrar sesión</a></header><main class="panel"><div class="heading"><div><h1>Calendario de competiciones</h1><p class="muted">Temporada 2026–2027 · Eventos guardados en WordPress</p></div><button class="btn primary" id="add">+ Nueva competición</button></div><div class="toolbar"><select id="org"><option value="TODAS">Todas las entidades</option>${['FAE','FADE','RFEE','OTRA'].map(x=>`<option ${x===org?'selected':''}>${x}</option>`).join('')}</select><select id="view"><option value="list" ${view==='list'?'selected':''}>Vista listado</option><option value="month" ${view==='month'?'selected':''}>Vista mensual</option></select><span id="monthcontrols"></span><button class="btn" id="print">🖨 Imprimir / PDF</button></div><div class="printhead"><h1>Club de Esgrima Almedina · Competiciones</h1><p>Filtro: ${esc(org)}</p></div><div id="results"></div></main></div><div id="modalhost"></div>`;
-function draw(){root.innerHTML=template();$('#org').onchange=e=>{org=e.target.value;draw()};$('#view').onchange=e=>{view=e.target.value;draw()};$('#add').onclick=()=>form();$('#print').onclick=()=>window.print();const mc=$('#monthcontrols');if(view==='month'){mc.innerHTML=`<button class="btn" id="prev">‹</button> <strong>${esc(new Date(month+'-01T12:00:00').toLocaleDateString('es-ES',{month:'long',year:'numeric'}))}</strong> <button class="btn" id="next">›</button>`;$('#prev').onclick=()=>move(-1);$('#next').onclick=()=>move(1)}renderResults()}
-function move(n){let d=new Date(month+'-01T12:00:00');d.setMonth(d.getMonth()+n);month=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');draw()}
-function renderResults(){let v=visible(),target=$('#results');if(view==='list'){target.innerHTML=v.length?v.map(e=>`<article class="item"><div class="date">${esc(date(e.start_date))}</div><div class="item-body"><strong>${esc(e.title)}</strong><span class="chip">${esc(e.organizer)}</span><span class="chip">${esc(e.weapon)} · ${esc(e.category)}</span><small>${esc(e.city||'Sede pendiente')} · ${esc(e.format)} · ${esc(e.status)}${e.end_date!==e.start_date?' · Hasta '+esc(date(e.end_date)):''}</small>${e.source_url?`<small><a href="${esc(e.source_url)}" target="_blank" rel="noopener noreferrer">Convocatoria / fuente ↗</a></small>`:''}</div><button class="btn no-print" data-edit="${e.id}">Editar</button></article>`).join(''):'<p class="empty">Todavía no hay competiciones. Añade la primera con el botón superior.</p>'}else{let first=new Date(month+'-01T12:00:00'),days=new Date(first.getFullYear(),first.getMonth()+1,0).getDate(),pad=(first.getDay()+6)%7;target.innerHTML='<div class="calendar">'+['L','M','X','J','V','S','D'].map(x=>`<div class="weekday">${x}</div>`).join('')+Array(pad).fill('<div></div>').join('')+Array.from({length:days},(_,i)=>{let key=month+'-'+String(i+1).padStart(2,'0'),items=v.filter(e=>e.start_date<=key&&e.end_date>=key);return `<div class="day"><b>${i+1}</b>${items.map(e=>`<button class="dot no-print" data-edit="${e.id}" title="Editar">${esc(e.title)}</button><span class="dot printhead">${esc(e.title)}</span>`).join('')}</div>`}).join('')+'</div>'}target.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>form(events.find(e=>String(e.id)===b.dataset.edit)))}
-const defaults={title:'',start_date:'',end_date:'',city:'',organizer:'FAE',weapon:'espada',category:'absoluta',format:'individual',status:'provisional',source_url:'',notes:''};function form(item){editing=item||null;let e={...defaults,...item};const options=(key,vals)=>`<select name="${key}">${vals.map(v=>`<option value="${v}" ${e[key]===v?'selected':''}>${v}</option>`).join('')}</select>`;const input=(key,type='text',required=false)=>`<input name="${key}" type="${type}" value="${esc(e[key])}" ${required?'required':''}>`;$('#modalhost').innerHTML=`<div class="modal"><div class="dialog" role="dialog" aria-modal="true" aria-label="Editar competición"><h2>${item?'Editar':'Nueva'} competición</h2><form id="eventform"><div class="fields"><label class="field wide">Nombre ${input('title','text',true)}</label><label class="field">Fecha de inicio ${input('start_date','date',true)}</label><label class="field">Fecha de fin ${input('end_date','date')}</label><label class="field">Ciudad ${input('city')}</label><label class="field">Entidad ${options('organizer',['FAE','FADE','RFEE','OTRA'])}</label><label class="field">Arma ${options('weapon',['espada','florete','sable','mixta'])}</label><label class="field">Categoría ${input('category')}</label><label class="field">Modalidad ${options('format',['individual','equipos','ambas'])}</label><label class="field">Estado ${options('status',['provisional','confirmado','cancelado'])}</label><label class="field wide">Enlace oficial ${input('source_url','url')}</label><label class="field wide">Notas <textarea name="notes" rows="3">${esc(e.notes)}</textarea></label></div><p id="formerror" class="error" role="alert"></p><div class="actions"><div>${item?'<button class="btn danger" type="button" id="delete">Eliminar</button>':''}</div><div><button class="btn" type="button" id="cancel">Cancelar</button> <button class="btn primary" type="submit">Guardar</button></div></div></form></div></div>`;$('#cancel').onclick=close;$('.modal').addEventListener('click',e=>{if(e.target.classList.contains('modal'))close()});$('#eventform').onsubmit=save;if(item)$('#delete').onclick=remove}
-function close(){$('#modalhost').innerHTML=''}async function request(url,method='GET',body){let r=await fetch(url,{method,credentials:'same-origin',headers:{'X-WP-Nonce':config.nonce,...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});let data=await r.json().catch(()=>({}));if(!r.ok)throw Error(data.message||'Error de conexión ('+r.status+')');return data}
-async function refresh(){try{events=await request(config.api);draw()}catch(e){root.innerHTML=`<div class="shell panel"><h1>No se pudo cargar el calendario</h1><p class="error">${esc(e.message)}</p><button class="btn" id="retry">Reintentar</button></div>`;$('#retry').onclick=refresh}}
-async function save(ev){ev.preventDefault();let f=new FormData(ev.target),data=Object.fromEntries(f.entries());data.end_date=data.end_date||data.start_date;let btn=ev.target.querySelector('[type=submit]');btn.disabled=true;try{await request(config.api+(editing?'/'+editing.id:''),editing?'PUT':'POST',data);close();await refresh()}catch(e){$('#formerror').textContent=e.message;btn.disabled=false}}
-async function remove(){if(!confirm('¿Eliminar esta competición?'))return;try{await request(config.api+'/'+editing.id,'DELETE');close();await refresh()}catch(e){$('#formerror').textContent=e.message}}
-refresh();})();
+/* Shell del panel: menú lateral responsive y router por hash (#/seccion/parametros). */
+(function () {
+  'use strict';
+  var A = window.Almedina, esc = A.esc, root = document.getElementById('app');
+
+  var NAV = [
+    ['dashboard', 'Dashboard', '▦'],
+    ['calendario', 'Calendario', '📅'],
+    ['torneos', 'Gestor de torneos', '🏆'],
+    ['tiradores', 'Tiradores', '🤺'],
+    ['marcador', 'Marcador', '⏱'],
+    ['resultados', 'Resultados', '📊'],
+    ['configuracion', 'Configuración', '⚙']
+  ];
+  var current = null;
+
+  function parse() {
+    var parts = (location.hash || '').replace(/^#\/?/, '').split('/').filter(Boolean);
+    var name = parts[0] || 'dashboard';
+    if (!A.views[name]) name = 'dashboard';
+    return { name: name, params: parts.slice(1) };
+  }
+
+  function shell() {
+    root.innerHTML = '<div class="layout"><aside class="sidebar" id="sidebar"><div class="brand">⚔ Almedina<small>Club Manager</small></div><nav id="nav">' +
+      NAV.map(function (n) { return '<a href="#/' + n[0] + '" data-nav="' + n[0] + '"><span class="ico" aria-hidden="true">' + n[2] + '</span>' + esc(n[1]) + '</a>'; }).join('') +
+      '</nav><div class="side-foot"><div class="muted small">' + esc(A.cfg.user) + '</div><a class="btn" href="' + esc(A.cfg.logout) + '">Cerrar sesión</a></div></aside>' +
+      '<div class="mainwrap"><header class="topbar"><button class="btn" id="burger" aria-label="Menú" aria-expanded="false">☰</button><strong id="toptitle">Almedina</strong></header><main class="content panel" id="content"></main></div></div>' +
+      '<div id="modalhost"></div><div id="toasts" aria-live="polite"></div>';
+    A.$('#burger').onclick = function () {
+      var open = A.$('#sidebar').classList.toggle('open');
+      A.$('#burger').setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    A.$('#nav').addEventListener('click', function () { A.$('#sidebar').classList.remove('open'); });
+  }
+
+  A.router = function () {
+    var r = parse();
+    if (current && A.views[current].leave) A.views[current].leave();
+    current = r.name;
+    A.$$('#nav a').forEach(function (a) { a.classList.toggle('active', a.dataset.nav === r.name); });
+    A.$('#toptitle').textContent = A.views[r.name].title;
+    document.title = A.views[r.name].title + ' · Almedina Gestión';
+    A.$('#modalhost').innerHTML = '';
+    var c = A.$('#content');
+    window.scrollTo(0, 0);
+    return A.views[r.name].render(c, r.params);
+  };
+
+  shell();
+  window.addEventListener('hashchange', A.router);
+  A.router();
+})();
