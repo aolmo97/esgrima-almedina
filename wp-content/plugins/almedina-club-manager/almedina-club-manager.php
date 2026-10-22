@@ -1,0 +1,89 @@
+<?php
+/**
+ * Plugin Name: Almedina Club Manager
+ * Description: Backoffice privado de competiciones del Club de Esgrima Almedina.
+ * Version: 0.1.1
+ * Requires PHP: 7.4
+ * Text Domain: almedina-club-manager
+ */
+if (!defined('ABSPATH')) exit;
+final class Almedina_Club_Manager {
+ const VERSION='0.1.1'; const DB_OPTION='almedina_club_manager_db_version'; const CAP='manage_almedina_calendar'; const ROUTE='gestion';
+ static function init(){
+  add_action('init',[__CLASS__,'rewrite']);
+  add_filter('query_vars',function($vars){$vars[]='almedina_gestion';return $vars;});
+  add_action('template_redirect',[__CLASS__,'render']);
+  add_action('rest_api_init',[__CLASS__,'api']);
+  add_action('admin_menu',[__CLASS__,'menu']);
+  add_action('plugins_loaded',[__CLASS__,'maybe_upgrade']);
+  add_filter('rest_post_dispatch',[__CLASS__,'no_store'],10,3);
+ }
+ static function table(){global $wpdb;return $wpdb->prefix.'almedina_events';}
+ static function activate(){
+  global $wpdb;require_once ABSPATH.'wp-admin/includes/upgrade.php';
+  $table=self::table();$charset=$wpdb->get_charset_collate();
+  dbDelta("CREATE TABLE $table (
+   id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+   title varchar(220) NOT NULL,
+   start_date date NOT NULL,
+   end_date date NOT NULL,
+   city varchar(150) NOT NULL DEFAULT '',
+   organizer varchar(12) NOT NULL DEFAULT 'FAE',
+   weapon varchar(20) NOT NULL DEFAULT 'espada',
+   category varchar(80) NOT NULL DEFAULT 'absoluta',
+   format varchar(20) NOT NULL DEFAULT 'individual',
+   status varchar(20) NOT NULL DEFAULT 'provisional',
+   source_url varchar(500) NOT NULL DEFAULT '',
+   notes text NULL,
+   created_at datetime NOT NULL,
+   updated_at datetime NOT NULL,
+   PRIMARY KEY  (id),
+   KEY start_date (start_date)
+  ) $charset;");
+  $role=get_role('administrator');if($role)$role->add_cap(self::CAP);
+  self::rewrite();flush_rewrite_rules();
+ }
+ static function maybe_upgrade(){if(get_option(self::DB_OPTION)!==self::VERSION){self::activate();update_option(self::DB_OPTION,self::VERSION);}}
+ static function no_store($response,$server,$request){if(strpos($request->get_route(),'/almedina/v1/')===0){$response->header('Cache-Control','no-store, private');$response->header('X-Robots-Tag','noindex, nofollow');}return $response;}
+ static function deactivate(){flush_rewrite_rules();}
+ static function rewrite(){add_rewrite_rule('^gestion/?$','index.php?almedina_gestion=1','top');}
+ static function menu(){add_management_page('Almedina Club Manager','Almedina Club Manager',self::CAP,'almedina-club-manager',function(){echo '<div class="wrap"><h1>Almedina Club Manager</h1><p>Panel privado: <a href="'.esc_url(home_url('/gestion/')).'">Abrir /gestion</a></p><p>El acceso requiere una cuenta con el permiso <code>'.esc_html(self::CAP).'</code>.</p></div>';});}
+ static function render(){
+  if(!get_query_var('almedina_gestion'))return;
+  if(!is_user_logged_in()){wp_safe_redirect(wp_login_url(home_url('/gestion/')));exit;}
+  if(!current_user_can(self::CAP)){status_header(403);nocache_headers();wp_die('No tienes permisos para gestionar el calendario.','Acceso denegado',['response'=>403]);}
+  nocache_headers();header('X-Robots-Tag: noindex, nofollow',true);
+  $css=plugins_url('assets/app.css',__FILE__);$js=plugins_url('assets/app.js',__FILE__);
+  $cfg=['api'=>esc_url_raw(rest_url('almedina/v1/events')),'nonce'=>wp_create_nonce('wp_rest'),'logout'=>wp_logout_url(home_url('/')),'user'=>wp_get_current_user()->display_name];
+  ?><!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Almedina · Gestión</title><link rel="stylesheet" href="<?php echo esc_url($css); ?>"></head><body><div id="app"><p>Cargando panel…</p></div><script>window.ALMEDINA_CONFIG=<?php echo wp_json_encode($cfg,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT); ?>;</script><script src="<?php echo esc_url($js); ?>" defer></script></body></html><?php exit;
+ }
+ static function api(){register_rest_route('almedina/v1','/events',[
+  ['methods'=>'GET','callback'=>[__CLASS__,'list_events'],'permission_callback'=>[__CLASS__,'allowed']],
+  ['methods'=>'POST','callback'=>[__CLASS__,'create_event'],'permission_callback'=>[__CLASS__,'allowed']]
+ ]);register_rest_route('almedina/v1','/events/(?P<id>\d+)',[
+  ['methods'=>'PUT','callback'=>[__CLASS__,'update_event'],'permission_callback'=>[__CLASS__,'allowed']],
+  ['methods'=>'DELETE','callback'=>[__CLASS__,'delete_event'],'permission_callback'=>[__CLASS__,'allowed']]
+ ]);}
+ static function allowed(){return current_user_can(self::CAP);}
+ static function list_events($request){global $wpdb;$table=self::table();$rows=$wpdb->get_results("SELECT * FROM $table ORDER BY start_date ASC, id ASC",ARRAY_A);return rest_ensure_response($rows);}
+ static function validate($request){
+  $p=$request->get_json_params();if(!is_array($p))return new WP_Error('invalid_body','Se esperaba JSON',['status'=>400]);
+  foreach(['title','start_date','end_date','city','organizer','weapon','category','format','status','source_url','notes'] as $k){if(isset($p[$k])&&!is_string($p[$k]))return new WP_Error('invalid_'.$k,'Tipo de dato no válido: '.$k,['status'=>400]);}
+  $title=sanitize_text_field($p['title']??'');if($title===''||mb_strlen($title)>220)return new WP_Error('invalid_title','Nombre obligatorio (máximo 220 caracteres)',['status'=>400]);
+  $start=self::date($p['start_date']??'');$end=self::date($p['end_date']??($p['start_date']??''));
+  if(!$start||!$end||$end<$start)return new WP_Error('invalid_dates','Fechas inválidas',['status'=>400]);
+  $choices=['organizer'=>['FAE','FADE','RFEE','OTRA'],'weapon'=>['espada','florete','sable','mixta'],'format'=>['individual','equipos','ambas'],'status'=>['provisional','confirmado','cancelado']];
+  $city=sanitize_text_field($p['city']??'');if(mb_strlen($city)>150)return new WP_Error('invalid_city','Ciudad demasiado larga (máximo 150)',['status'=>400]);
+  $category=sanitize_text_field($p['category']??'absoluta');if(mb_strlen($category)>80)return new WP_Error('invalid_category','Categoría demasiado larga (máximo 80)',['status'=>400]);
+  $notes=sanitize_textarea_field($p['notes']??'');if(mb_strlen($notes)>5000)return new WP_Error('invalid_notes','Notas demasiado largas (máximo 5000)',['status'=>400]);
+  $out=['title'=>$title,'start_date'=>$start,'end_date'=>$end,'city'=>$city,'category'=>$category,'notes'=>$notes];
+  foreach($choices as $key=>$values){$v=sanitize_text_field($p[$key]??$values[0]);if(!in_array($v,$values,true))return new WP_Error('invalid_'.$key,'Valor no válido: '.$key,['status'=>400]);$out[$key]=$v;}
+  $url=esc_url_raw($p['source_url']??'');if($url&&(mb_strlen($url)>500||!wp_http_validate_url($url)))return new WP_Error('invalid_url','URL de origen no válida',['status'=>400]);$out['source_url']=$url;
+  return $out;
+ }
+ static function date($raw){$raw=is_string($raw)?$raw:'';if(!preg_match('/^\d{4}-\d{2}-\d{2}$/',$raw))return false;$dt=DateTimeImmutable::createFromFormat('!Y-m-d',$raw);return $dt&&$dt->format('Y-m-d')===$raw?$raw:false;}
+ static function create_event($request){global $wpdb;$data=self::validate($request);if(is_wp_error($data))return $data;$data['created_at']=current_time('mysql');$data['updated_at']=current_time('mysql');if(!$wpdb->insert(self::table(),$data))return new WP_Error('db_error','No se pudo guardar',['status'=>500]);return new WP_REST_Response(['id'=>(int)$wpdb->insert_id],201);}
+ static function update_event($request){global $wpdb;$id=(int)$request['id'];$data=self::validate($request);if(is_wp_error($data))return $data;$data['updated_at']=current_time('mysql');$res=$wpdb->update(self::table(),$data,['id'=>$id]);if($res===false)return new WP_Error('db_error','No se pudo actualizar',['status'=>500]);if($res===0&&!$wpdb->get_var($wpdb->prepare('SELECT id FROM '.self::table().' WHERE id=%d',$id)))return new WP_Error('not_found','No existe',['status'=>404]);return rest_ensure_response(['id'=>$id]);}
+ static function delete_event($request){global $wpdb;$res=$wpdb->delete(self::table(),['id'=>(int)$request['id']]);if($res===false)return new WP_Error('db_error','No se pudo eliminar',['status'=>500]);if(!$res)return new WP_Error('not_found','No existe',['status'=>404]);return rest_ensure_response(['deleted'=>true]);}
+}
+register_activation_hook(__FILE__,['Almedina_Club_Manager','activate']);register_deactivation_hook(__FILE__,['Almedina_Club_Manager','deactivate']);Almedina_Club_Manager::init();
