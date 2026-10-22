@@ -78,7 +78,7 @@ final class Almedina_Club_Manager {
   $notes=sanitize_textarea_field($p['notes']??'');if(mb_strlen($notes)>5000)return new WP_Error('invalid_notes','Notas demasiado largas (máximo 5000)',['status'=>400]);
   $out=['title'=>$title,'start_date'=>$start,'end_date'=>$end,'city'=>$city,'category'=>$category,'notes'=>$notes];
   foreach($choices as $key=>$values){$v=sanitize_text_field($p[$key]??$values[0]);if(!in_array($v,$values,true))return new WP_Error('invalid_'.$key,'Valor no válido: '.$key,['status'=>400]);$out[$key]=$v;}
-  $url=esc_url_raw($p['source_url']??'');if($url&&(mb_strlen($url)>500||!wp_http_validate_url($url)))return new WP_Error('invalid_url','URL de origen no válida',['status'=>400]);$out['source_url']=$url;
+  $raw_url=trim($p['source_url']??'');$url=$raw_url===''?'':esc_url_raw($raw_url,['http','https']);if($raw_url!==''&&($url===''||mb_strlen($url)>500||!wp_http_validate_url($url)))return new WP_Error('invalid_url','URL de origen no válida (solo http o https, máximo 500 caracteres)',['status'=>400]);$out['source_url']=$url;
   return $out;
  }
  static function date($raw){$raw=is_string($raw)?$raw:'';if(!preg_match('/^\d{4}-\d{2}-\d{2}$/',$raw))return false;$dt=DateTimeImmutable::createFromFormat('!Y-m-d',$raw);return $dt&&$dt->format('Y-m-d')===$raw?$raw:false;}
